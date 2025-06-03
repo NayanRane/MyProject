@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login Page</title>
+        <title>Signup Page</title>
         <link
             href="bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css"
             rel="stylesheet" type="text/css" />
@@ -14,20 +14,24 @@
     <body>
         <!-- <div class="container-fluid min-vh-100 d-flex align-items-center px-0" > -->
         <div
-            class=" min-vh-100 d-flex align-items-center px-0 justify-content-center"
+            class=" min-vh-100 d-flex align-items-center px-0 justify-content-center ms-auto"
             style="width: 50%;">
             <div class="card border-0 my-autorounded-0" style="width: 80%;">
                 <div class="row mt-3 mx-5">
                     <div class="col-8 mx-auto  px-0">
-                        <h1 class="fw-bold">Welcome Back</h1>
+                        <h1 class="fw-bold">Sign Up</h1>
                     </div>
                 </div>
                 <div class="row mt-3  mx-5">
                     <div class="col-8 mx-auto  px-0">
-                        <p class>Please enter your details</p>
+                        <p class="">Create an account or <a href="index.html" class="ms-1">Log in</a> </p>
                     </div>
                 </div>
                 <form class="justify-content-center">
+                    <div class="row mt-3 mx-5">
+                        <div class="col-8 mx-auto  px-0">
+                            <input type="email" class="form-control" id="emailId" placeholder="name@example.com"> </div>
+                    </div>
                     <div class="row mt-3 mx-5">
                         <div class="col-8 mx-auto  px-0">
                             <input type="text" id="userName"
@@ -41,40 +45,11 @@
                                 class="form-control" id="inputPassword2"
                                 placeholder="Password"> </div>
                     </div>
-                    <div class="row mt-3 mx-5">
-                        <div class="col-8 mx-auto  px-0">
-                            <div class="row">
-                                <div class="col d-flex">
-                                    <input class="form-check-input"
-                                        id="rememberMe" type="checkbox" value
-                                         />
-                                    <label class="form-check-label ms-1"
-                                        for="rememberMe">
-                                        Remember me
-                                    </label>
-                                </div>
-                                <div class="col text-end">
-                                    <a
-                                        class="btn-link text-decoration-underline"
-                                        id="forgetPassword"
-                                        href="index.html">
-                                        Forgot Password?
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row mt-3 mb-5 mx-5">
                         <button class="col-8 mx-2 mx-auto btn btn-primary"
                             type="submit" id="loginBtn">
-                            Login
+                            Sign Up
                         </button>
-                    </div>
-                    <div class="row my-3 mb-5 mx-5">
-                        <div class="col-8 mx-2 mx-auto text-center">
-                            <p>Don't have an account?<a href="signUp.html"
-                                    class="ms-1">Sign Up</a></p>
-                        </div>
                     </div>
                 </form>
             </div>
