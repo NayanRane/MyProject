@@ -18,3 +18,7 @@ input::placeholder {
   color: #191923 !important;
   background-color: #e94f37;
 }
+
+.w-70 {
+  width: 70% !important;
+}
