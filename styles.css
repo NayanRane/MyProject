@@ -22,3 +22,8 @@ input::placeholder {
 .w-70 {
   width: 70% !important;
 }
+
+.nav-icon {
+  width: 1.5rem;
+  height: 2rem;
+}
