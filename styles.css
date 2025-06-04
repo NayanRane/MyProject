@@ -13,3 +13,8 @@ input::placeholder {
   color: gray;
   font-style: italic;
 }
+
+#searchBtn:hover{
+  color: #191923 !important;
+  background-color: #e94f37;
+}
