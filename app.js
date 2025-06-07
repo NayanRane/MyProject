@@ -30,6 +30,7 @@ values.forEach((val) => {
 });
 
 // Step 3: Avoid duplicates and build <th> with colspan
+let added = new Set();
 let thRow = "<tr>";
 
 $.each(counts, function (key, val) {
