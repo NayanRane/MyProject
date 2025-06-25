@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link
+      href="Bootstrap 5.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="Metronics/css/plugins.bundle.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="Metronics/css/style.bundle.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="Kt ui/css/styles.css" rel="stylesheet" type="text/css" />
+
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <!-- <div class="container-fluid min-vh-100 d-flex align-items-center px-0" > -->
+    <div
+      class="min-vh-100 d-flex align-items-center px-0 justify-content-center"
+      style="width: 100%"
+    >
+      <div
+        class="card border-red my-autorounded-0"
+        style="width: 50%; border: 1px solid red"
+      >
+        <form class="justify-content-center" id="loginForm">
+          <div class="row mt-3 mx-2">
+            <div class="col-8 mx-auto px-0">
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="city"
+                  class="form-control"
+                  placeholder="Search city"
+                  name="search"
+                />
+                <span class="input-group-text"
+                  ><button type="button" id="searchBtn">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-search"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+                      />
+                    </svg></button
+                ></span>
+              </div>
+              <span id="passwordError" style="color: red"></span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- </div> -->
+    <script src="Bootstrap 5.0/js/bootstrap.bundle.min.js"></script>
+    <script src="Metronics/js/plugins.bundle.js"></script>
+    <script src="Metronics/js/scripts.bundle.js"></script>
+    <script src="Kt ui/js/ktui.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
