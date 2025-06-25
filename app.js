@@ -1,7 +1,7 @@
 let password = document.getElementById("passWord");
 let eyeBtn = document.getElementById("eyeBtn");
+let allInput = document.querySelectorAll("input");
 let showPassClick = false;
-let userData = [];
 
 
 document.getElementById("showPass").onclick = () => {
@@ -75,7 +75,7 @@ document.getElementById("signUpForm").addEventListener("submit", function (event
             document.getElementById("passwordError").textContent = "Invalid password format";
             isValid = false;
         }
-    }else{
+    } else {
         document.getElementById("passwordError").textContent = "Password is required";
         isValid = false;
     }
@@ -85,9 +85,36 @@ document.getElementById("signUpForm").addEventListener("submit", function (event
             Email: email, UserName: username, Password: password
         }
 
-        userData.push(obj);
-        localStorage.setItem('logingInfo',JSON.stringify(userData))
+        let storedData = localStorage.getItem('Logininfo');
+
+        if (storedData == null){
+            localStorage.setItem("Logininfo",JSON.stringify([obj]))
+        }else{
+            storedData = JSON.parse(storedData);
+            storedData.push(obj);
+            localStorage.setItem("Logininfo",JSON.stringify(storedData));
+        }
+
+
+        for (let i = 0; i < allInput.length; i++) {
+            allInput[i].value = "";
+        }
         alert("Form submitted successfully!");
         // You could also use: this.submit();
     }
 });
+
+
+// fetch('https://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=ff64049707b1a6f8ad5a3f7fe9b54694')
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json(); // parse JSON from the response
+//     })
+//     .then(data => {
+//         console.log(data); // handle the data
+//     })
+//     .catch(error => {
+//         console.error('There was a problem with the fetch operation:', error);
+//     });
