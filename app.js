@@ -1,9 +1,12 @@
+let emailError = document.getElementById("emailError");
+let userNameError = document.getElementById("userNameError");
+let passwordError = document.getElementById("passwordError");
+
 let password = document.getElementById("passWord");
 let eyeBtn = document.getElementById("eyeBtn");
 let allInput = document.querySelectorAll("input");
 let showPassClick = false;
-
-
+let storedData =[];
 document.getElementById("showPass").onclick = () => {
     showPassClick = !showPassClick;
     if (showPassClick === true) {
@@ -26,21 +29,21 @@ document.getElementById("showPass").onclick = () => {
 
 document.getElementById("signUpForm").addEventListener("submit", function (event) {
     event.preventDefault(); // prevent form from submitting
-
+    storedData =[];
+     let storedinlocalStorage = localStorage.getItem('Logininfo');
+    if (storedinlocalStorage !== null) {
+        // localStorage.setItem("Logininfo", JSON.stringify([obj]))
+        storedData = JSON.parse(storedinlocalStorage);
+    } 
     // Get input values
     const email = document.getElementById("emailId").value;
     const username = document.getElementById("userName").value;
     const password = document.getElementById("passWord").value;
-
-
-
-
     let isValid = true;
 
-    // Reset error messages
-    document.getElementById("emailError").textContent = "";
-    document.getElementById("userNameError").textContent = "";
-    document.getElementById("passwordError").textContent = "";
+    emailError.textContent = "";
+    userNameError.textContent = "";
+    passwordError.textContent = "";
 
 
 
@@ -52,48 +55,49 @@ document.getElementById("signUpForm").addEventListener("submit", function (event
 
     if (email != "") {
         if (!email.match(emailPattern)) {
-            document.getElementById("emailError").textContent = "Invalid email format";
+            emailError.textContent = "Invalid email format";
             isValid = false;
+        }else {
+            if (storedData != null){
+                storedData.some(x => x.Email  === email)? (emailError.textContent = "Username already exists", isValid = false):emailError.textContent = ""; 
+            }
         }
     } else {
-        document.getElementById("emailError").textContent = "Email is required";
+        emailError.textContent = "Email is required";
         isValid = false;
     }
 
     if (username != "") {
         if (!username.match(userPattern)) {
-            document.getElementById("userNameError").textContent = "Invalid username format";
+            userNameError.textContent = "Invalid username format";
             isValid = false;
+        } else {
+            if (storedData != null){
+                storedData.some(x => x.UserName  === username)? (userNameError.textContent = "Username already exists", isValid = false):userNameError.textContent = ""; 
+            }
         }
     } else {
-        document.getElementById("userNameError").textContent = "Username is required";
+        userNameError.textContent = "Username is required";
         isValid = false;
     }
 
     if (password != "") {
         if (!password.match(passPattern)) {
-            document.getElementById("passwordError").textContent = "Invalid password format";
+            passwordError.textContent = "Invalid password format";
             isValid = false;
         }
     } else {
-        document.getElementById("passwordError").textContent = "Password is required";
+        passwordError.textContent = "Password is required";
         isValid = false;
     }
 
     if (isValid) {
-        let obj = {
+        storedData.push({
             Email: email, UserName: username, Password: password
-        }
-
-        let storedData = localStorage.getItem('Logininfo');
-
-        if (storedData == null){
-            localStorage.setItem("Logininfo",JSON.stringify([obj]))
-        }else{
-            storedData = JSON.parse(storedData);
-            storedData.push(obj);
-            localStorage.setItem("Logininfo",JSON.stringify(storedData));
-        }
+        })
+        
+        localStorage.setItem("Logininfo", JSON.stringify(storedData))
+        
 
 
         for (let i = 0; i < allInput.length; i++) {

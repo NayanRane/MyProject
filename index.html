@@ -8,6 +8,16 @@
             href="bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css"
             rel="stylesheet" type="text/css" />
         <link
+            href="metronics/css/plugins.bundle.css"
+            rel="stylesheet" type="text/css" />
+        <link
+            href="metronics/css/style.bundle.css"
+            rel="stylesheet" type="text/css" />
+        <link
+            href="ktui/css/styles.css"
+            rel="stylesheet" type="text/css" />
+
+        <link
             href="styles.css"
             rel="stylesheet" type="text/css" />
     </head>
@@ -27,27 +37,40 @@
                         <p class>Please enter your details</p>
                     </div>
                 </div>
-                <form class="justify-content-center">
+                <form class="justify-content-center" id="loginForm">
                     <div class="row mt-3 mx-5">
                         <div class="col-8 mx-auto  px-0">
                             <input type="text" id="userName"
                                 class="form-control" placeholder="Username"
                                 aria-label="Username"
-                                aria-describedby="basic-addon1"> </div>
+                                aria-describedby="basic-addon1">
+                            <span id="userNameError"
+                                style="color:red;"></span>
+                        </div>
                     </div>
                     <div class="row mt-3 mx-5">
                         <div class="col-8 mx-auto  px-0">
-                            <input type="password" id="passWord"
-                                class="form-control" id="inputPassword2"
-                                placeholder="Password"> </div>
+                            <div class="input-group">
+                                <input type="password" id="passWord"
+                                    class="form-control"
+                                    placeholder="Password" name="Password" />
+                                <span class="input-group-text"
+                                    id="showPass"><button type="button" id="eyeBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" id="openEye" viewBox="0 0 16 16">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                    </svg></button></span>
+
+                            </div>
+                            <span id="passwordError"
+                                style="color:red;"></span>
+                        </div>
                     </div>
                     <div class="row mt-3 mx-5">
                         <div class="col-8 mx-auto  px-0">
                             <div class="row">
                                 <div class="col d-flex">
                                     <input class="form-check-input"
-                                        id="rememberMe" type="checkbox" value
-                                         />
+                                        id="rememberMe" type="checkbox" value />
                                     <label class="form-check-label ms-1"
                                         for="rememberMe">
                                         Remember me
@@ -55,7 +78,7 @@
                                 </div>
                                 <div class="col text-end">
                                     <a
-                                        class="btn-link text-decoration-underline"
+                                        class="btn-link"
                                         id="forgetPassword"
                                         href="index.html">
                                         Forgot Password?
@@ -83,5 +106,9 @@
         <!-- </div> -->
         <script
             src="bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>
+        <script src="metronics/js/plugins.bundle.js"></script>
+        <script src="metronics/js/scripts.bundle.js"></script>
+        <script src="ktui/js/ktui.min.js"></script>
+        <script src="signin.js"></script>
     </body>
 </html>
