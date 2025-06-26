@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* font-family: "Poppins"; */
 }
 
 html, body {
@@ -26,4 +27,10 @@ input::placeholder {
 .nav-icon {
   width: 1.5rem;
   height: 2rem;
+}
+
+#searchBtn:focus-visible {  
+  outline: 2px solid #00aaff;
+  border-radius: 4px;
+
 }
