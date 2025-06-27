@@ -54,6 +54,9 @@ const showData = (data) => {
 
     const { name, main, wind, weather, sys } = data;
 
+    // const { cx, cy, rx, ry } = drawSunPath();
+    const { cx, cy, radius } = drawSunPath();
+
     cardTitle.textContent = name;
     temperature.textContent = Math.round(main.temp);
     humidity.textContent = main.humidity;
@@ -64,25 +67,31 @@ const showData = (data) => {
     const sunriseInMin = timeToMinutes(convertTimestampToTime(data.sys.sunrise));
     const sunsetInMin = timeToMinutes(convertTimestampToTime(data.sys.sunset))
 
-    function getCurrentMinutes() {
-        const now = new Date();
-        return now.getHours() * 60 + now.getMinutes();
-    }
 
     const sun = document.getElementById('sun');
     const skyWidth = document.getElementById('sky').offsetWidth;
     const now = getCurrentMinutes();
 
 
-    const sunProgress = Math.max(0, Math.min(1, (now - sunriseInMin) / (sunsetInMin  - sunriseInMin)));
+    const sunProgress = Math.max(0, Math.min(1, (now - sunriseInMin) / (sunsetInMin - sunriseInMin)));
+
+    // const sunAngle = sunProgress * Math.PI; // from 0 (sunrise) to π (sunset)
+
+    // // X and Y on the elliptical arc
+    // const sunX = cx - rx * Math.cos(sunAngle);
+    // const sunY = cy - ry * Math.sin(sunAngle);
+
+    // sun.style.left = `${sunX}px`;
+    // sun.style.top = `${sunY}px`;
 
 
-    const sunX = sunProgress * skyWidth;    
-    const sunY = Math.sin(sunProgress * Math.PI) * -100 + 100; // Simulates an arc
+    const sunAngle = sunProgress * Math.PI * 0.8; // 0 to π
 
+    const sunX = cx - radius * Math.cos(sunAngle);
+    const sunY = cy - radius * Math.sin(sunAngle);
+    
     sun.style.left = `${sunX}px`;
     sun.style.top = `${sunY}px`;
-
 
     const weatherMain = weather[0].main;
     const iconSrc = weatherIcons[weatherMain];
@@ -91,6 +100,62 @@ const showData = (data) => {
         img.setAttribute("src", iconSrc);
     }
 
+}
+
+function getCurrentMinutes() {
+    const now = new Date();
+    return now.getHours() * 60 + now.getMinutes();
+}
+
+// function drawSunPath() {
+//     const svg = document.getElementById("sunPathSVG");
+//     const path = document.getElementById("sunPath");
+//     const width = svg.clientWidth;
+//     const height = svg.clientHeight;
+
+//     // Ellipse radii
+//     const rx = width / 2.5;         // Horizontal radius
+//     const ry = height / 3;          // Vertical radius
+
+//     // Arc center position — middle of the container
+//     const cx = width / 2;
+//     const cy = height / 2;
+
+//     // Start and end points of the arc
+//     const startX = cx - rx;
+//     const endX = cx + rx;
+
+//     // Elliptical arc path
+//     const d = `M ${startX},${cy} A ${rx},${ry} 0 0,1 ${endX},${cy}`;
+//     path.setAttribute("d", d);
+
+//     return { cx, cy, rx, ry };
+// }
+
+function drawSunPath() {
+    const svg = document.getElementById("sunPathSVG");
+    const path = document.getElementById("sunPath");
+    const width = svg.clientWidth;
+    const height = svg.clientHeight;
+
+    // Set arc radius (should be less than half width/height)
+    const radius = Math.min(width, height) / 2.2;
+
+    // Arc center (x = middle of sky, y = lower than middle to push arc up)
+    const cx = width / 2;
+    const cy = height * 0.75; // Adjust 0.75 to move the arc up or down
+
+    // Start and end points of the arc
+    const startX = cx - radius;
+    const startY = cy;
+    const endX = cx + radius;
+    const endY = cy;
+
+    // Draw arc from left to right: large-arc-flag = 0, sweep-flag = 1
+    const d = `M ${startX},${startY} A ${radius},${radius} 0 0,1 ${endX},${endY}`;
+    path.setAttribute("d", d);
+
+    return { cx, cy, radius };
 }
 
 

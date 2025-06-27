@@ -39,13 +39,15 @@ input::placeholder {
   width: 100%;
   height: 200px;
   position: relative;
-  background: linear-gradient(to top, #87CEEB, #ffffff);
+  /* background: linear-gradient(to top, #87CEEB, #ffffff); */
   overflow: hidden;
 }
 
 #sun {
-  width: 50px;
-  height: 50px;
+  z-index: 1;
+  transition: top 1s ease, left 1s ease;  
+  width: 30px;
+  height: 30px;
   background: yellow;
   border-radius: 50%;
   position: absolute;
@@ -53,3 +55,14 @@ input::placeholder {
   left: 0;
   transform: translate(-50%, -50%);
 }
+
+#sunPathSVG {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* #sun {
+  z-index: 1;
+} */

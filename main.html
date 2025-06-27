@@ -66,8 +66,52 @@
               alt="cloudsimages">
           </div>
           <div class="mb-5 text-center">
-            <h1 style="font-size: 36px;"><span id="temperature">36</span>°C</h1>
+            <!-- <h1><span id="temperature" style="font-size: 40px;">36</span><sup style="font-size: 20px;">°C</sup></h1> -->
+            <h1 style="font-size: 60px; font-weight: normal;"
+              class="d-flex align-items-center justify-content-center">
+              <span id="temperature">36</span>
+              <sup style="font-size: 30px;">°C</sup>
+            </h1>
           </div>
+          <!-- <div class="row mb-5">
+            <div class="col d-flex align-items-center justify-content-center">
+              <div style="width: 50px;height: 50px;"><img
+                  src="Images/humidity.png" class="card-img-top"
+                  alt="humidity"></div>
+              <div class="ms-3">
+                <h5 style="font-size: 20px;"><span id="humidity">80</span>%</h5>
+              </div>
+            </div>
+            <div class="col d-flex align-items-center justify-content-center">
+              <div style="width: 50px;height: 50px;"><img
+                  src="Images/wind.png" class="card-img-top"
+                  alt="wind"></div>
+              <div class="ms-3">
+                <h5 style="font-size: 20px;"><span
+                    id="windSpeed">80</span>Km/h</h5>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <h6>Sunrise : <span id="sunrise">05:10</span></h6>
+            <h6>Sunset : <span id="sunset">19:20</span></h6>
+          </div>
+          <div class="row">
+            <div id="sky">
+              <svg id="sunPathSVG" width="100%" height="100%">
+                <path id="sunPath" d stroke="orange" stroke-dasharray="5,5"
+                  fill="none" stroke-width="2" />
+              </svg>
+              <div id="sun"></div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+      <!-- ====== -->
+      <div
+        class="card border-red my-autorounded-0 d-flex justify-content-center"
+        style="width: 30%; border: 1px solid red;background: linear-gradient(to right, #243748, #4b749f);">
+        <div class="card-body py-0">
           <div class="row mb-5">
             <div class="col d-flex align-items-center justify-content-center">
               <div style="width: 50px;height: 50px;"><img
@@ -93,12 +137,16 @@
           </div>
           <div class="row">
             <div id="sky">
+              <svg id="sunPathSVG" width="100%" height="100%">
+                <path id="sunPath" d stroke="orange" stroke-dasharray="5,5"
+                  fill="none" stroke-width="2" />
+              </svg>
               <div id="sun"></div>
-            </div>  
+            </div>
           </div>
         </div>
+
       </div>
-      <!-- ====== -->
       <script
         src="bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>
       <script src="metronics/js/plugins.bundle.js"></script>
