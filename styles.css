@@ -60,3 +60,8 @@ input::placeholder {
 /* #sun {
   z-index: 1;
 } */
+
+
+#city , #passWord {
+  padding-right: 40px; /* Adjust depending on button width */
+}
