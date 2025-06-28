@@ -17,7 +17,7 @@ input::placeholder {
 
 #searchBtn:hover{
   color: #191923 !important;
-  background-color: #e94f37;
+  /* background-color: #e94f37; */
 }
 
 .w-70 {
@@ -46,8 +46,8 @@ input::placeholder {
 #sun {
   z-index: 1;
   transition: top 1s ease, left 1s ease;  
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   background: yellow;
   border-radius: 50%;
   position: absolute;
@@ -63,3 +63,6 @@ input::placeholder {
   z-index: 0;
 }
 
+/* #sun {
+  z-index: 1;
+} */
