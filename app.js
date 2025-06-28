@@ -11,6 +11,8 @@ let apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q="
 const tempUnit = document.getElementById("tempUnit"); 
 let conditions = document.getElementById("weather");
 
+// let countryAPi = "https://restcountries.com/v3.1/alpha/IN"
+
 
 const weatherIcons = {
     Clouds: "Images/clouds.png",
