@@ -1,34 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link
-            href="metronics/css/plugins.bundle.css"
-            rel="stylesheet" type="text/css" />
-        <link
-            href="metronics/css/style.bundle.css"
-            rel="stylesheet" type="text/css" />
-        <link
-            href="bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css"
-            rel="stylesheet" type="text/css" />
-        <link
-            href="styles.css"
-            rel="stylesheet" type="text/css" />
-        <link
-            href="ktui/css/styles.css"
-            rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="googleFont/googleFonts.css" type="text/css">    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click to Create Circles</title>
+    <style>
+        /* Box Styles */
+        #box {
+            width:  400px;
+            height:  400px;
+            background-color: lightgrey;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #000;
+        }
 
-    </head>
-    <body>
+        /* Circle Styles */
+        .circle {
+            width: 50px; /* diameter = 2 * radius */
+            height: 50px;
+            background-color: blue;
+            border-radius: 50%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
 
-        <!-- <script
-            src="bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>
-        <script src="metronics/js/plugins.bundle.js"></script>
-        <script src="metronics/js/scripts.bundle.js"></script> -->
-        <script src="ktui/js/ktui.min.js"></script>
+<div id="box"></div>
 
-    </body>
-</html> 
+<script>
+    const box = document.getElementById("box");
+
+    box.addEventListener("click", function(event) {
+        // Get click position relative to the box
+        const rect = box.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        // Create the circle
+        const circle = document.createElement("div");
+        circle.classList.add("circle");
+
+        // Set the position of the circle
+        circle.style.left = `${x - 20}px`;  // Subtract radius to center the circle
+        circle.style.top = `${y - 20}px`;   // Subtract radius to center the circle
+
+        // Add the circle to the box
+        box.appendChild(circle);
+    });
+</script>
+
+</body>
+</html>
