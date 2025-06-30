@@ -6,12 +6,12 @@ let windSpeed = document.getElementById("windSpeed");
 let img = document.getElementById("img");
 let sunrise = document.getElementById("sunrise");
 let sunset = document.getElementById("sunset");
+let country = document.getElementById("country");
 let apiKey = "ff64049707b1a6f8ad5a3f7fe9b54694";
 let apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q="
 const tempUnit = document.getElementById("tempUnit"); 
 let conditions = document.getElementById("weather");
 
-// let countryAPi = "https://restcountries.com/v3.1/alpha/IN"
 
 
 const weatherIcons = {
@@ -72,14 +72,15 @@ document.getElementById("searchBtn").onclick = () => {
 const showData = (data) => {
 
     const { name, main, wind, weather, sys } = data;
-
     const { cx, cy, radius } = drawSunPath();
-
     const weatherMain = weather[0].main;
+    let countryCode = sys.country;
+
 
     cardTitle.textContent = name;
     temperature.textContent = Math.round(main.temp);
     tempUnit.textContent = "°C";
+    countryCode ? country.textContent = countryCode : country.textContent = "";
     humidity.textContent = main.humidity;
     windSpeed.textContent = wind.speed;
     conditions.textContent = weatherMain;

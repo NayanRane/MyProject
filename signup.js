@@ -105,8 +105,8 @@ document.getElementById("signUpForm").addEventListener("submit", function (event
             allInput[i].value = "";
         }
         alert("Form submitted successfully!");
-        // You could also use: this.submit();
-    }
+        window.location.href = 'index.html';
+        }
 });
 
 
