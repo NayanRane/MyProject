@@ -1,0 +1,1221 @@
+@using MileageReimbursement_Domain.Models;
+@model Tuple<Mileage,List<ProcessMileageDetailViewModel>>
+@using Newtonsoft.Json
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Create";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <form id="formProcess" method="post" enctype="multipart/form-data" class="mileage_reimbursement_createpage">
+            <input type="hidden" asp-for="Item1.CreatedBy" name="CreatedBy" value="1">
+            <input type="hidden" asp-for="Item1.ClaimNo" name="ClaimNo" value="1">
+            <input type="hidden" asp-for="Item1.MileageStatus" name="MileageStatus" value="1">
+            @* <input type="hidden" asp-for="Item1.CompanyCode" name="CompanyCode" value="C"> *@
+            <input type="hidden" asp-for="Item1.Approver1Name" name="Approver1Name" id="Approver1Name">
+            <input type="hidden" asp-for="Item1.Approver2Name" name="Approver2Name" id="Approver2Name">
+            <input type="hidden" asp-for="Item1.EmployeeCompanyName" name="EmployeeCompanyName" value="C">
+            <input type="hidden" asp-for="Item1.EmployeeCompanyCode" name="EmployeeCompanyCode" value="C">
+            <input type="hidden" asp-for="Item1.EmployeeDepartmentName" name="EmployeeDepartmentName" value="D">
+            <input type="hidden" asp-for="Item1.EmployeeDepartmentCode" name="EmployeeDepartmentCode" value="D">
+            <input type="hidden" name="CompanyName" value="C">
+            @* <input type="file" id="fileInput" name="MileageDetailAttachmentID"> *@
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <h3 class="card-title text-primary fw-bold">Create Mileage Claim</h3>
+                        <button title="Pin to Shortcuts" type="button" class="btn pin-shortcut text-white ms-4"
+                            id="shortcut_Btn">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect width="18" height="18" rx="9" fill="white" />
+                                <path
+                                    d="M9 10.359L9 13.394M7.26574 7.02408V7.94784C7.26574 8.03803 7.26574 8.08312 7.25689 8.12626C7.24903 8.16452 7.23604 8.20155 7.21827 8.23634C7.19824 8.27555 7.17007 8.31077 7.11373 8.38119L6.43313 9.23195C6.14448 9.59275 6.00016 9.77315 6 9.92497C5.99986 10.057 6.05989 10.1819 6.16308 10.2643C6.28174 10.359 6.51277 10.359 6.97482 10.359H11.0252C11.4872 10.359 11.7183 10.359 11.8369 10.2643C11.9401 10.1819 12.0001 10.057 12 9.92497C11.9998 9.77315 11.8555 9.59275 11.5669 9.23195L10.8863 8.38119C10.8299 8.31077 10.8018 8.27555 10.7817 8.23634C10.764 8.20155 10.751 8.16452 10.7431 8.12626C10.7343 8.08312 10.7343 8.03803 10.7343 7.94784V7.02408C10.7343 6.97416 10.7343 6.94921 10.7371 6.92459C10.7396 6.90273 10.7438 6.88109 10.7495 6.85986C10.7561 6.83596 10.7653 6.81279 10.7839 6.76644L11.2209 5.674C11.3483 5.35529 11.4121 5.19593 11.3855 5.06801C11.3623 4.95614 11.2958 4.85798 11.2006 4.79485C11.0917 4.72266 10.92 4.72266 10.5768 4.72266H7.42323C7.07997 4.72266 6.90834 4.72266 6.79944 4.79485C6.70421 4.85798 6.63775 4.95614 6.6145 5.06801C6.58792 5.19593 6.65166 5.35529 6.77914 5.674L7.21612 6.76644C7.23466 6.81279 7.24393 6.83596 7.25045 6.85986C7.25624 6.88109 7.26041 6.90273 7.26292 6.92459C7.26574 6.94921 7.26574 6.97416 7.26574 7.02408Z"
+                                    stroke="#0E0E0E" stroke-width="0.8" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>&nbsp;
+                            Pin to Shortcuts
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body py-3">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gy-3 " id="myDiv">
+                        <div class="col col-lg-6 mileage_validation">
+                            <label class="label-control fw-bold required" asp-for="Item1.MileageHeader"></label>
+                            <input type="text" maxlength="200" minlength="3" id="MileageHeader" asp-for="Item1.MileageHeader"
+                                class="form-control disabled_button" placeholder="Enter Mileage Claim Header" autofocus
+                                name="MileageHeader" autocomplete="off" spellcheck="true" onkeypress="return newAlphaNumericChar(this,event)">
+                        </div>
+                        <div class="col mileage_validation">
+                            <label class="label-control fw-bold required" asp-for="Item1.MileageFromDate"></label>
+                            <div class="input-group">
+                                <input type="text" style="pointer-event:none" id="FromDate" asp-for="Item1.MileageFromDate"
+                                    class="form-control rounded-start-2 border-end-0 disabled_button headerDate"
+                                    name="MileageFromDate" placeholder="Select a date" autocomplete="off" />
+                                <span class="input-group-text bg-theme">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 20 19"
+                                        fill="none">
+                                        <path
+                                            d="M2.26562 9.2487C2.26562 6.3417 2.26562 4.88821 3.16871 3.98512C4.0718 3.08203 5.5253 3.08203 8.43229 3.08203H11.5156C14.4226 3.08203 15.8761 3.08203 16.7792 3.98512C17.6823 4.88821 17.6823 6.3417 17.6823 9.2487V10.7904C17.6823 13.6974 17.6823 15.1509 16.7792 16.0539C15.8761 16.957 14.4226 16.957 11.5156 16.957H8.43229C5.5253 16.957 4.0718 16.957 3.16871 16.0539C2.26562 15.1509 2.26562 13.6974 2.26562 10.7904V9.2487Z"
+                                            stroke="#436B97" stroke-width="1.3875" />
+                                        <path d="M6.125 3.08203V1.92578" stroke="#436B97" stroke-width="1.3875"
+                                            stroke-linecap="round" />
+                                        <path d="M13.8281 3.08203V1.92578" stroke="#436B97" stroke-width="1.3875"
+                                            stroke-linecap="round" />
+                                        <path d="M2.65625 6.9375H17.3021" stroke="#436B97" stroke-width="1.3875"
+                                            stroke-linecap="round" />
+                                        <path
+                                            d="M14.6042 13.1042C14.6042 13.5299 14.2591 13.875 13.8333 13.875C13.4076 13.875 13.0625 13.5299 13.0625 13.1042C13.0625 12.6784 13.4076 12.3333 13.8333 12.3333C14.2591 12.3333 14.6042 12.6784 14.6042 13.1042Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M14.6042 10.0208C14.6042 10.4466 14.2591 10.7917 13.8333 10.7917C13.4076 10.7917 13.0625 10.4466 13.0625 10.0208C13.0625 9.59511 13.4076 9.25 13.8333 9.25C14.2591 9.25 14.6042 9.59511 14.6042 10.0208Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M10.7448 13.1042C10.7448 13.5299 10.3997 13.875 9.97396 13.875C9.54824 13.875 9.20312 13.5299 9.20312 13.1042C9.20312 12.6784 9.54824 12.3333 9.97396 12.3333C10.3997 12.3333 10.7448 12.6784 10.7448 13.1042Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M10.7448 10.0208C10.7448 10.4466 10.3997 10.7917 9.97396 10.7917C9.54824 10.7917 9.20312 10.4466 9.20312 10.0208C9.20312 9.59511 9.54824 9.25 9.97396 9.25C10.3997 9.25 10.7448 9.59511 10.7448 10.0208Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M6.89323 13.1042C6.89323 13.5299 6.54812 13.875 6.1224 13.875C5.69668 13.875 5.35156 13.5299 5.35156 13.1042C5.35156 12.6784 5.69668 12.3333 6.1224 12.3333C6.54812 12.3333 6.89323 12.6784 6.89323 13.1042Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M6.89323 10.0208C6.89323 10.4466 6.54812 10.7917 6.1224 10.7917C5.69668 10.7917 5.35156 10.4466 5.35156 10.0208C5.35156 9.59511 5.69668 9.25 6.1224 9.25C6.54812 9.25 6.89323 9.59511 6.89323 10.0208Z"
+                                            fill="#436B97" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col mileage_validation">
+                            <label class="label-control fw-bold required" asp-for="Item1.MileageToDate"></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control rounded-start-2 border-end-0 disabled_button headerDate" asp-for="Item1.MileageToDate"
+                                    id="Todate" name="MileageToDate" placeholder="Select a date"
+                                    onkeypress="return isNumber(event)" autocomplete="off" />
+                                <span class="input-group-text bg-theme">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 20 19"
+                                        fill="none">
+                                        <path
+                                            d="M2.26562 9.2487C2.26562 6.3417 2.26562 4.88821 3.16871 3.98512C4.0718 3.08203 5.5253 3.08203 8.43229 3.08203H11.5156C14.4226 3.08203 15.8761 3.08203 16.7792 3.98512C17.6823 4.88821 17.6823 6.3417 17.6823 9.2487V10.7904C17.6823 13.6974 17.6823 15.1509 16.7792 16.0539C15.8761 16.957 14.4226 16.957 11.5156 16.957H8.43229C5.5253 16.957 4.0718 16.957 3.16871 16.0539C2.26562 15.1509 2.26562 13.6974 2.26562 10.7904V9.2487Z"
+                                            stroke="#436B97" stroke-width="1.3875" />
+                                        <path d="M6.125 3.08203V1.92578" stroke="#436B97" stroke-width="1.3875"
+                                            stroke-linecap="round" />
+                                        <path d="M13.8281 3.08203V1.92578" stroke="#436B97" stroke-width="1.3875"
+                                            stroke-linecap="round" />
+                                        <path d="M2.65625 6.9375H17.3021" stroke="#436B97" stroke-width="1.3875"
+                                            stroke-linecap="round" />
+                                        <path
+                                            d="M14.6042 13.1042C14.6042 13.5299 14.2591 13.875 13.8333 13.875C13.4076 13.875 13.0625 13.5299 13.0625 13.1042C13.0625 12.6784 13.4076 12.3333 13.8333 12.3333C14.2591 12.3333 14.6042 12.6784 14.6042 13.1042Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M14.6042 10.0208C14.6042 10.4466 14.2591 10.7917 13.8333 10.7917C13.4076 10.7917 13.0625 10.4466 13.0625 10.0208C13.0625 9.59511 13.4076 9.25 13.8333 9.25C14.2591 9.25 14.6042 9.59511 14.6042 10.0208Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M10.7448 13.1042C10.7448 13.5299 10.3997 13.875 9.97396 13.875C9.54824 13.875 9.20312 13.5299 9.20312 13.1042C9.20312 12.6784 9.54824 12.3333 9.97396 12.3333C10.3997 12.3333 10.7448 12.6784 10.7448 13.1042Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M10.7448 10.0208C10.7448 10.4466 10.3997 10.7917 9.97396 10.7917C9.54824 10.7917 9.20312 10.4466 9.20312 10.0208C9.20312 9.59511 9.54824 9.25 9.97396 9.25C10.3997 9.25 10.7448 9.59511 10.7448 10.0208Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M6.89323 13.1042C6.89323 13.5299 6.54812 13.875 6.1224 13.875C5.69668 13.875 5.35156 13.5299 5.35156 13.1042C5.35156 12.6784 5.69668 12.3333 6.1224 12.3333C6.54812 12.3333 6.89323 12.6784 6.89323 13.1042Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M6.89323 10.0208C6.89323 10.4466 6.54812 10.7917 6.1224 10.7917C5.69668 10.7917 5.35156 10.4466 5.35156 10.0208C5.35156 9.59511 5.69668 9.25 6.1224 9.25C6.54812 9.25 6.89323 9.59511 6.89323 10.0208Z"
+                                            fill="#436B97" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col col-md-12 col-lg-12 mileage_validation">
+                            <label class="label-control fw-bold required" asp-for="Item1.MileageDescription"></label>
+                            <div class="input-group">
+                                <textarea id="MileageDescription" class="form-control disabled_button"
+                                    name="MileageDescription" minlength="4" maxlength="350" asp-for="Item1.MileageDescription"
+                                    placeholder="Enter Description" autocomplete="off" spellcheck="true"
+                                    onkeypress="return newAlphaNumericChar(this,event)"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 mileage_validation">
+                            <label class=" label-control fw-bold required" asp-for="Item1.Approver1Id"></label>
+                            <div class="input-group">
+                                <select class="form-select disabled_button Approver" id="Approver1Id" asp-for="Item1.Approver1Id"
+                                name="Approver1Id" asp-items="@ViewBag.Approver1Id">
+                                    <option value="">Select Approver 1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label class="label-control fw-bold" asp-for="Item1.Approver2Id"></label>
+                            <div class="input-group">
+                                <select class="form-select Approver" id="Approver2Id" asp-for="Item1.Approver2Id"
+                                name="Approver2Id" asp-items="@ViewBag.Approver2Id">
+                                    <option value="">Select Approver 2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-sm-12 col-md-4 col-lg-6 text-end pe-5 mt-md-12 mt-5">
+                            <button title="Clear" type="button" class="btn clear-button mt-6 disabled text2 me-3"
+                                tabindex="-1" title="Clear Table Record" id="btnClear">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-trash3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                                </svg>&nbsp;
+                                Clear</button>
+                            <button title="Add Details" type="button" id="btndisable" data-bs-toggle="modal"
+                                tabindex="-1" data-bs-target="#AddDataModal"
+                                class="btn add-button text-white mt-6 text2 disabled">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                                    fill="none">
+                                    <path d="M10.0013 4.16797V15.8346M4.16797 10.0013H15.8346" stroke="white"
+                                        stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>&nbsp;Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive p-8 py-0 px-0 mx-5 mt-5">
+                    <table class="table align-middle table-bordered mileagetable dataTable" id="mileage_create_table">
+                        <thead class="bg-secondary text-primary">
+                            <tr class="px-2">
+                                <th class="th-1 ">
+                                    Mileage Date
+                                </th>
+                                <th>
+                                    Company
+                                </th>
+                                <th>
+                                    Cluster
+                                </th>
+                                <th>
+                                    Project
+                                </th>
+                                <th>
+                                    Start Location
+                                </th>
+                                <th>
+                                    End Location
+                                </th>
+                                <th>
+                                    Mileage
+                                </th>
+                                <th class="text-md-center">
+                                    Amount (USD)
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Attachment
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="fw-semibold text-gray-600" id="Mileage_createTable_body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer border-0 px-md-5 py-3">
+                    <div class="row md-5">
+                        <div class="col-sm-4 col-md-2 col-lg-2 m-0 p-0 mb-3">
+                            <a class="btn me-2 button-base-white" onclick="backbtn('page')">
+                                <div class="text-2">
+                                    <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M17.1693 3.33398V4.50065C17.1693 7.30091 17.1693 8.70104 16.6243 9.7706C16.1449 10.7114 15.38 11.4763 14.4392 11.9557C13.3697 12.5007 11.9695 12.5007 9.16927 12.5007H3.83594M3.83594 12.5007L8.0026 8.33398M3.83594 12.5007L8.0026 16.6673"
+                                            stroke="#344054" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </svg>&nbsp;
+                                    Back To List
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-8 col-md-10 col-lg-10 text-sm-end text-md-end text-lg-end">
+                            <button title="Save as Draft" type="submit" id="btn_drafts" asp-controller="Mileages"
+                                asp-action="SaveAsDraft" class="btn button-base-white mb-3 me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                                    fill="none">
+                                    <path
+                                        d="M5.83333 2.5H12.2288C12.6364 2.5 12.8402 2.5 13.0321 2.54605C13.2021 2.58688 13.3647 2.65422 13.5138 2.7456C13.682 2.84867 13.8261 2.9928 14.1144 3.28105L16.719 5.88562C17.0072 6.17387 17.1513 6.318 17.2544 6.48619C17.3458 6.63531 17.4131 6.79789 17.4539 6.96795C17.5 7.15976 17.5 7.36359 17.5 7.77124V14.1667M10.4167 8.33333H7.16667C6.69996 8.33333 6.4666 8.33333 6.28834 8.24251C6.13154 8.16261 6.00406 8.03513 5.92416 7.87833C5.83333 7.70007 5.83333 7.46671 5.83333 7V5.41667M11.25 17.5V13.8333C11.25 13.3666 11.25 13.1333 11.1592 12.955C11.0793 12.7982 10.9518 12.6707 10.795 12.5908C10.6167 12.5 10.3834 12.5 9.91667 12.5H7.16667C6.69996 12.5 6.4666 12.5 6.28834 12.5908C6.13154 12.6707 6.00406 12.7982 5.92416 12.955C5.83333 13.1333 5.83333 13.3666 5.83333 13.8333V17.5M14.5833 8.46895V14.8333C14.5833 15.7668 14.5833 16.2335 14.4017 16.59C14.2419 16.9036 13.9869 17.1586 13.6733 17.3183C13.3168 17.5 12.8501 17.5 11.9167 17.5H5.16667C4.23325 17.5 3.76654 17.5 3.41002 17.3183C3.09641 17.1586 2.84144 16.9036 2.68166 16.59C2.5 16.2335 2.5 15.7668 2.5 14.8333V8.08333C2.5 7.14991 2.5 6.6832 2.68166 6.32668C2.84144 6.01308 3.09641 5.75811 3.41002 5.59832C3.76654 5.41667 4.23325 5.41667 5.16667 5.41667H11.531C11.7349 5.41667 11.8368 5.41667 11.9327 5.43969C12.0177 5.46011 12.099 5.49378 12.1736 5.53947C12.2577 5.591 12.3297 5.66306 12.4739 5.80719L14.1928 7.52614C14.3369 7.67027 14.409 7.74233 14.4605 7.82643C14.5062 7.90099 14.5399 7.98228 14.5603 8.06731C14.5833 8.16321 14.5833 8.26513 14.5833 8.46895Z"
+                                        stroke="#344054" stroke-width="1.2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>&nbsp;
+                                <span class="indicator-label">
+                                    Save as Draft
+                                </span>
+                                <span class="indicator-progress">
+                                    Please wait... <span
+                                        class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                            </button>
+                            <button title="Submit" id="btn_process" title="Submit" asp-controller="Mileages"
+                                asp-action="Create" class="btn button-base text-white mb-3 me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                                    fill="none">
+                                    <path d="M16.6654 5L7.4987 14.1667L3.33203 10" stroke="white" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>&nbsp;
+                                <span class="indicator-label">
+                                    Submit
+                                </span>
+                                <span class="indicator-progress">
+                                    Please wait... <span
+                                        class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@* ================================= fileModal ================================== *@
+
+<div class="modal shadow-sm" tabindex="-1" id="fileModal">
+    <div class="modal-dialog">
+        <div class="btn btn-icon btn-circle bg-primary text-white w-25px h-25px bg-body shadow " aria-label="Close"
+            id="CloseIcon" onclick="closeModal()">
+            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+        </div>
+        <div class="modal-content">
+            <div class="modal-body px-15 pt-15 pb-1">
+                <div class="row">
+                    <div class="col text-center">
+                        <h1 class="modal-title">UPLOAD FILES</h1>
+                    </div>
+                </div>
+                <div class="row my-5" id="LabelforImageRow">
+                    <div class="col text-center">
+                        <span class="label no-file fw-bold" id="LabelforImage"
+                            onmouseover="filefunctionModal(this, false)">No file chosen</span>
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col text-center">
+                        <label id="fileLabelName" class="fs-2 fw-bold">No file chosen</label>
+                    </div>
+
+                </div>
+                <div class="row row-cols-5">
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body px-3 py-5">
+                                <a href="#" class="btn btn-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#436b97"
+                                        class="bi bi-filetype-png" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M14 4.5V14a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zm-3.76 8.132q.114.23.14.492h-.776a.8.8 0 0 0-.097-.249.7.7 0 0 0-.17-.19.7.7 0 0 0-.237-.126 1 1 0 0 0-.299-.044q-.427 0-.665.302-.234.301-.234.85v.498q0 .351.097.615a.9.9 0 0 0 .304.413.87.87 0 0 0 .519.146 1 1 0 0 0 .457-.096.67.67 0 0 0 .272-.264q.09-.164.091-.363v-.255H8.82v-.59h1.576v.798q0 .29-.097.55a1.3 1.3 0 0 1-.293.458 1.4 1.4 0 0 1-.495.313q-.296.111-.697.111a2 2 0 0 1-.753-.132 1.45 1.45 0 0 1-.533-.377 1.6 1.6 0 0 1-.32-.58 2.5 2.5 0 0 1-.105-.745v-.506q0-.543.2-.95.201-.406.582-.633.384-.228.926-.228.357 0 .636.1.281.1.48.275.2.176.314.407Zm-8.64-.706H0v4h.791v-1.343h.803q.43 0 .732-.172.305-.177.463-.475a1.4 1.4 0 0 0 .161-.677q0-.374-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.381.57.57 0 0 1-.238.24.8.8 0 0 1-.375.082H.788v-1.406h.66q.327 0 .512.182.185.181.185.521m1.964 2.666V13.25h.032l1.761 2.675h.656v-3.999h-.75v2.66h-.032l-1.752-2.66h-.662v4z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body px-3 py-5">
+                                <a href="#" class="btn btn-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#ffc700"
+                                        class="bi bi-filetype-jpg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zm-4.34 8.132q.114.23.14.492h-.776a.8.8 0 0 0-.097-.249.7.7 0 0 0-.17-.19.7.7 0 0 0-.237-.126 1 1 0 0 0-.299-.044q-.428 0-.665.302-.234.301-.234.85v.498q0 .351.097.615a.9.9 0 0 0 .304.413.87.87 0 0 0 .519.146 1 1 0 0 0 .457-.096.67.67 0 0 0 .272-.264q.09-.164.091-.363v-.255H8.24v-.59h1.576v.798q0 .29-.097.55a1.3 1.3 0 0 1-.293.458 1.4 1.4 0 0 1-.495.313q-.296.111-.697.111a2 2 0 0 1-.753-.132 1.45 1.45 0 0 1-.533-.377 1.6 1.6 0 0 1-.32-.58 2.5 2.5 0 0 1-.105-.745v-.506q0-.543.2-.95.201-.406.582-.633.384-.228.926-.228.357 0 .636.1.28.1.48.275t.314.407ZM0 14.786q0 .246.082.465.083.22.243.39.165.17.407.267.246.093.569.093.63 0 .984-.345.357-.346.358-1.005v-2.725h-.791v2.745q0 .303-.138.466t-.422.164a.5.5 0 0 1-.454-.246.6.6 0 0 1-.073-.27H0Zm4.92-2.86H3.322v4h.791v-1.343h.803q.43 0 .732-.172.305-.177.463-.475.162-.302.161-.677 0-.374-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179Zm.546 1.333a.8.8 0 0 1-.085.381.57.57 0 0 1-.238.24.8.8 0 0 1-.375.082H4.11v-1.406h.66q.327 0 .512.182.185.181.185.521Z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body px-3 py-5">
+                                <a href="#" class="btn btn-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#7239ea"
+                                        class="bi bi-filetype-gif" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M14 4.5V14a2 2 0 0 1-2 2H9v-1h3a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM3.278 13.124a1.4 1.4 0 0 0-.14-.492 1.3 1.3 0 0 0-.314-.407 1.5 1.5 0 0 0-.48-.275 1.9 1.9 0 0 0-.636-.1q-.542 0-.926.229a1.5 1.5 0 0 0-.583.632 2.1 2.1 0 0 0-.199.95v.506q0 .408.105.745.105.336.32.58.213.243.533.377.323.132.753.132.402 0 .697-.111a1.29 1.29 0 0 0 .788-.77q.097-.261.097-.551v-.797H1.717v.589h.823v.255q0 .199-.09.363a.67.67 0 0 1-.273.264 1 1 0 0 1-.457.096.87.87 0 0 1-.519-.146.9.9 0 0 1-.305-.413 1.8 1.8 0 0 1-.096-.615v-.499q0-.547.234-.85.237-.3.665-.301a1 1 0 0 1 .3.044q.136.044.236.126a.7.7 0 0 1 .17.19.8.8 0 0 1 .097.25zm1.353 2.801v-3.999H3.84v4h.79Zm1.493-1.59v1.59h-.791v-3.999H7.88v.653H6.124v1.117h1.605v.638z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body px-3 py-5">
+                                <a href="#" class="btn btn-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red"
+                                        class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
+                                    </svg>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body px-3 py-5">
+                                <a href="#" class="btn btn-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#50cd89"
+                                        class="bi bi-filetype-doc" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M14 4.5V14a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zm-7.839 9.166v.522q0 .384-.117.641a.86.86 0 0 1-.322.387.9.9 0 0 1-.469.126.9.9 0 0 1-.471-.126.87.87 0 0 1-.32-.386 1.55 1.55 0 0 1-.117-.642v-.522q0-.386.117-.641a.87.87 0 0 1 .32-.387.87.87 0 0 1 .471-.129q.264 0 .469.13a.86.86 0 0 1 .322.386q.117.255.117.641m.803.519v-.513q0-.565-.205-.972a1.46 1.46 0 0 0-.589-.63q-.381-.22-.917-.22-.533 0-.92.22a1.44 1.44 0 0 0-.589.627q-.204.406-.205.975v.513q0 .563.205.973.205.406.59.627.386.216.92.216.535 0 .916-.216.383-.22.59-.627.204-.41.204-.973M0 11.926v4h1.459q.603 0 .999-.238a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.59-.68q-.395-.234-1.004-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082H.79V12.57Zm7.422.483a1.7 1.7 0 0 0-.103.633v.495q0 .369.103.627a.83.83 0 0 0 .298.393.85.85 0 0 0 .478.131.9.9 0 0 0 .401-.088.7.7 0 0 0 .273-.248.8.8 0 0 0 .117-.364h.765v.076a1.27 1.27 0 0 1-.226.674q-.205.29-.55.454a1.8 1.8 0 0 1-.786.164q-.54 0-.914-.216a1.4 1.4 0 0 1-.571-.627q-.194-.408-.194-.976v-.498q0-.568.197-.978.195-.411.571-.633.378-.223.911-.223.328 0 .607.097.28.093.489.272a1.33 1.33 0 0 1 .466.964v.073H9.78a.85.85 0 0 0-.12-.38.7.7 0 0 0-.273-.261.8.8 0 0 0-.398-.097.8.8 0 0 0-.475.138.87.87 0 0 0-.301.398" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-center">
+                    <button title="Save Files" type="button" class="btn btn-sm button-base" onclick="confirmSelection()"
+                        id="SaveUpLoadedFiles">Save Files</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AddDataModal" tabindex="-1" aria-labelledby="AddDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="AddDataModalLabel">
+                    Add Details
+                </h1>
+                <h1 class="modal-title d-none" id="EditDataModalLabel">
+                    Edit Data
+                </h1>
+
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" tabindex="0" onclick="backbtn('model')" 
+                    aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+            </div>
+            <div class="modal-body" id="model_MainDetails">
+                <form id="mileage_reimbursement_create_form" class="mileage_reimbursement_createpage">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 gy-2 ">
+                        <div class="col col-md-6 col-lg-3 validate_Details">
+                            <label class="label-control required" asp-for="Item2.FirstOrDefault().MileageDate"></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control rounded-start-2 border-end-0 modeldate"
+                                    autocomplete="false" name="MileageDate" id="mileageClaimDate"
+                                    placeholder="Select a date" />
+                                <span class="input-group-text bg-theme">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 20 19"
+                                        fill="none">
+                                        <path
+                                            d="M2.26562 9.2487C2.26562 6.3417 2.26562 4.88821 3.16871 3.98512C4.0718 3.08203 5.5253 3.08203 8.43229 3.08203H11.5156C14.4226 3.08203 15.8761 3.08203 16.7792 3.98512C17.6823 4.88821 17.6823 6.3417 17.6823 9.2487V10.7904C17.6823 13.6974 17.6823 15.1509 16.7792 16.0539C15.8761 16.957 14.4226 16.957 11.5156 16.957H8.43229C5.5253 16.957 4.0718 16.957 3.16871 16.0539C2.26562 15.1509 2.26562 13.6974 2.26562 10.7904V9.2487Z"
+                                            stroke="#436B97" stroke-width="1.3875" />
+                                        <path d="M6.125 3.08203V1.92578" stroke="#436B97" stroke-width="1.3875"
+                                            stroke-linecap="round" />
+                                        <path d="M13.8281 3.08203V1.92578" stroke="#436B97" stroke-width="1.3875"
+                                            stroke-linecap="round" />
+                                        <path d="M2.65625 6.9375H17.3021" stroke="#436B97" stroke-width="1.3875"
+                                            stroke-linecap="round" />
+                                        <path
+                                            d="M14.6042 13.1042C14.6042 13.5299 14.2591 13.875 13.8333 13.875C13.4076 13.875 13.0625 13.5299 13.0625 13.1042C13.0625 12.6784 13.4076 12.3333 13.8333 12.3333C14.2591 12.3333 14.6042 12.6784 14.6042 13.1042Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M14.6042 10.0208C14.6042 10.4466 14.2591 10.7917 13.8333 10.7917C13.4076 10.7917 13.0625 10.4466 13.0625 10.0208C13.0625 9.59511 13.4076 9.25 13.8333 9.25C14.2591 9.25 14.6042 9.59511 14.6042 10.0208Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M10.7448 13.1042C10.7448 13.5299 10.3997 13.875 9.97396 13.875C9.54824 13.875 9.20312 13.5299 9.20312 13.1042C9.20312 12.6784 9.54824 12.3333 9.97396 12.3333C10.3997 12.3333 10.7448 12.6784 10.7448 13.1042Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M10.7448 10.0208C10.7448 10.4466 10.3997 10.7917 9.97396 10.7917C9.54824 10.7917 9.20312 10.4466 9.20312 10.0208C9.20312 9.59511 9.54824 9.25 9.97396 9.25C10.3997 9.25 10.7448 9.59511 10.7448 10.0208Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M6.89323 13.1042C6.89323 13.5299 6.54812 13.875 6.1224 13.875C5.69668 13.875 5.35156 13.5299 5.35156 13.1042C5.35156 12.6784 5.69668 12.3333 6.1224 12.3333C6.54812 12.3333 6.89323 12.6784 6.89323 13.1042Z"
+                                            fill="#436B97" />
+                                        <path
+                                            d="M6.89323 10.0208C6.89323 10.4466 6.54812 10.7917 6.1224 10.7917C5.69668 10.7917 5.35156 10.4466 5.35156 10.0208C5.35156 9.59511 5.69668 9.25 6.1224 9.25C6.54812 9.25 6.89323 9.59511 6.89323 10.0208Z"
+                                            fill="#436B97" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div
+                            class="ms-8 col-sm-5 col-md-5 col-lg-8 validate_expense_reimbursement_create_form d-flex align-items-center gap-4">
+                            <label>Multiple Entities</label>
+                            <label class="switch">
+                                <input type="checkbox" id="toggleBtn">
+                                <span class="slider round mt-2"></span>
+                            </label>
+                        </div>
+                        <div class="col col-lg-3 validate_Details">
+                            <label asp-for="Item2.FirstOrDefault().CompanyCode"
+                                class="label-control required pe-none"></label>
+                            <div class="">
+                                <select class="form-select focus" asp-items="@ViewBag.Company" id="company"
+                                    onchange="bindCluster()" name="Company">
+                                    <option value="">Select Company</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-lg-3 validate_expense_reimbursement_create_form toggle-switch">
+                            <label asp-for="Item2.FirstOrDefault().ClusterCode" class="label-control pe-none"
+                                id="ProjectLabel"></label>
+                            <div class="" id="clusterDiv">
+                                <select class="form-select focus" id="cluster" name="Cluster" onchange="bindProject()">
+                                    <option value="">Select Cluster</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-lg-3 validate_expense_reimbursement_create_form toggle-switch">
+                            <label asp-for="Item2.FirstOrDefault().ProjectCode" class="label-control pe-none"></label>
+                            <div class="" id="projectDiv">
+                                <select class="form-select focus mw-100 multiSelectCheckbox fs-8" id="project"
+                                    name="Project" data-search="true" data-silent-initial-value-set="true">
+                                    <option value="">Select Project</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-lg-2 validate_expense_reimbursement_create_form">
+                            <button title="Add" type="button" id="addEntities" title="Add" tabindex="0"
+                                class="btn button-base text-white mt-6 ms-2 mt-10 d-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                                    fill="none">
+                                    <path d="M10.0013 4.16797V15.8346M4.16797 10.0013H15.8346" stroke="white"
+                                        stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="col col-lg-9 col-md-12 col-sm-12 d-none" id="entitiesDiv">
+                            <div class="text-end">
+                                <button title="Clear Table" type="button" class="button-base text-white"
+                                    id="clearTableData">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
+                                        fill="none">
+                                        <path
+                                            d="M6 2H10M2 4H14M12.6667 4L12.1991 11.0129C12.129 12.065 12.0939 12.5911 11.8667 12.99C11.6666 13.3412 11.3648 13.6235 11.0011 13.7998C10.588 14 10.0607 14 9.00623 14H6.99377C5.93927 14 5.41202 14 4.99889 13.7998C4.63517 13.6235 4.33339 13.3412 4.13332 12.99C3.90607 12.5911 3.871 12.065 3.80086 11.0129L3.33333 4"
+                                            stroke="#fff" stroke-width="1.2" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </svg>&nbsp;
+                                    Clear</button>
+                            </div>
+                            <table class="table align-middle table-bordered gy-3 mt-5" id="entitiesTable">
+                                <thead class="bg-secondary">
+                                    <th class="text-center">Company</th>
+                                    <th class="text-center">Cluster</th>
+                                    <th class="text-center">Projects</th>
+                                    <th class="text-center">Action</th>
+                                </thead>
+                                <tbody id="multiple_table"></tbody>
+                            </table>
+                        </div>
+                        <div class="col col-sm-12 col-md-12 col-lg-9 validate_Details">
+                            <label class="label-control required"
+                                asp-for="Item2.FirstOrDefault().MileageDetailDescription"></label>
+                            <textarea id="Description" class="form-control" data-kt-autosize="true"
+                                name="ModelDescription" minlength="3" maxlength="200" placeholder="Enter Description"
+                                autocomplete="off" onkeypress="return newAlphaNumericChar(this,event)"></textarea>
+                        </div>
+                        <div class="col">
+                            <button title="Add" type="button" id="addEntities" title="Add" tabindex="0"
+                                class="btn button-base text-white mt-6 ms-2 mt-10 d-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                                    fill="none">
+                                    <path d="M10.0013 4.16797V15.8346M4.16797 10.0013H15.8346" stroke="white"
+                                        stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row py-10" id="captureScreenshot">
+                        <div class="col">
+                            <ul class="nav nav-tabs nav-line-tabs mb-5 fs-1">
+                                <li class="nav-item">
+                                    <a class="nav-link active tabClick" data-bs-toggle="tab" href="#kt_tab_pane_1" data-tab="mileage">Mileage
+                                        Entry</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link tabClick" data-bs-toggle="tab" href="#kt_tab_pane_2" id="mapIntity" data-tab="map">Maps
+                                        Entry</a>
+                                </li>
+                                <div class="text-end" style="
+                                    float: inline-end;
+                                    position: absolute;
+                                    animation-range-end: 0;
+                                    right: 18px;
+                                ">Amount (USD) : <span id="actualMileidAmount"></span></div>
+                            </ul>
+
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
+                                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 validate_Details">
+                                        <div class="col validate_Details">
+                                            <label class="label-control required" for="StartLocation">Start Location</label>
+                                            <input type="text" class="form-control" name="StartLocation" id="startLocation"
+                                                placeholder="Enter Start Location" maxlength="250"/>
+                                        </div>
+                                           <div class="col validate_Details">
+                                            <label class="label-control required" for="EndLocation">End Location</label>
+                                            <input type="text" class="form-control" name="EndLocation" id="endLocation"
+                                                placeholder="Enter End Location" maxlength="250"/>
+                                        </div>
+                                           <div class="col validate_Details">
+                                            <label class="label-control required" for="ActualMileage">Miles</label>
+                                            @* <input id="hiddenMiles" type="hidden" /> *@
+                                            <input type="text" class="form-control" name="Mileage" id="mileage"
+                                                onkeypress="return isNumericDecimal(this,event)"
+                                                oninput="return zeronotAllow()" 
+                                                placeholder="Enter Miles" maxlength="7" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <!-- Left Side: Inputs -->
+                                            <div class="col-lg-4 col-12">
+                                                <div class="sidePanel">
+                                                    <div class="row mb-2">
+                                                        <div class="col-1 align-content-center">
+                                                            @* <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="currentColor" class="bi bi-circle"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                            </svg> *@
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="currentColor" class="bi bi-geo-alt"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                                                <path
+                                                                    d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="col-11 input-container validate_Details">
+                                                            <div class="input-group input-group-solid">
+                                                                <textarea type="text" id="fromTbx" name="MapFrom" maxlength="150"
+                                                                    class="form-control searchFocus mapLocation" dir="ltr"
+                                                                    title="Enter Start Location, or click on the map..."
+                                                                    style="padding-right: 35px;"  data-kt-autosize="true" rows="1"
+                                                                    placeholder="Enter Start Location"></textarea>
+                                                                    @* <svg
+                                                                    xmlns='http://www.w3.org/2000/svg' width='16'
+                                                                    height='16' fill="#436b97" viewBox='0 0 16 16'
+                                                                    class="input-iconfromTbx" title="search"
+                                                                    style="display: none;">
+                                                                    <path fill='%238C92A0'
+                                                                        d='M11.44 10.73l4.41 4.42a.5.5 0 1 1-.7.7l-4.42-4.41a6.5 6.5 0 1 1 .7-.7v-.01zM6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z'>
+                                                                    </path>
+                                                                </svg> *@
+                                                                <span class="input-group-text border-0">
+                                                                    <svg class="input-iconfromTbx"
+                                                                        xmlns='http://www.w3.org/2000/svg' width='16'
+                                                                        height='16' fill="#436b97" viewBox='0 0 16 16' title="search">
+                                                                        <path fill='%238C92A0'
+                                                                            d='M11.44 10.73l4.41 4.42a.5.5 0 1 1-.7.7l-4.42-4.41a6.5 6.5 0 1 1 .7-.7v-.01zM6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z'>
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </div>
+                                                            
+                                                            @* <div class="input-group input-group-solid">
+                                                                <textarea class="form-control searchFocus mapLocation" aria-label="With textarea"></textarea>
+                                                                <span class="input-group-text">
+                                                                    <svg
+                                                                        xmlns='http://www.w3.org/2000/svg' width='16'
+                                                                        height='16' fill="#436b97" viewBox='0 0 16 16' title="search">
+                                                                        <path fill='%238C92A0'
+                                                                            d='M11.44 10.73l4.41 4.42a.5.5 0 1 1-.7.7l-4.42-4.41a6.5 6.5 0 1 1 .7-.7v-.01zM6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z'>
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </div> *@
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-1 align-content-center mb-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="currentColor" class="bi bi-geo-alt"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                                                <path
+                                                                    d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                                            </svg>
+                                                        </div>
+                                                        @* <div class="col-11 input-container my-2 validate_Details">
+                                                            <textarea type="text" id="toTbx" name="MapTo" data-kt-autosize="true"
+                                                                class="form-control searchFocus mapLocation" dir="ltr"
+                                                                title="Choose destination..." rows="1"
+                                                                placeholder="Choose destination" style="padding-right: 35px;"></textarea>
+                                                                <svg xmlns='http://www.w3.org/2000/svg' width='16'
+                                                                height='16' fill="#436b97" viewBox='0 0 16 16'
+                                                                class="input-icontoTbx input-iconfromTbx" title="search"
+                                                                style="display: none;">
+                                                                <path fill='%238C92A0'
+                                                                    d='M11.44 10.73l4.41 4.42a.5.5 0 1 1-.7.7l-4.42-4.41a6.5 6.5 0 1 1 .7-.7v-.01zM6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z'>
+                                                                </path>
+                                                            </svg>
+                                                        </div> *@
+                                                        <div class="col-11 input-container my-2 validate_Details">
+                                                            <div class="input-group input-group-solid">
+                                                                <textarea type="text" id="toTbx" name="MapTo" data-kt-autosize="true"
+                                                                class="form-control searchFocus mapLocation" dir="ltr"
+                                                                title="Enter End Location" rows="1" maxlength="150"
+                                                                placeholder="Enter End Location" style="padding-right: 35px;"></textarea>
+                                                                <span class="input-group-text border-0">
+                                                                    <svg xmlns='http://www.w3.org/2000/svg' width='16'
+                                                                        height='16' fill="#436b97" viewBox='0 0 16 16'
+                                                                        class="input-icontoTbx input-iconfromTbx" title="search">
+                                                                        <path fill='%238C92A0'
+                                                                            d='M11.44 10.73l4.41 4.42a.5.5 0 1 1-.7.7l-4.42-4.41a6.5 6.5 0 1 1 .7-.7v-.01zM6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z'>
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <label for="search-country" class="form-label fw-bold text-primary">Filter by Country</label>
+                                                        @* <div class="input-group mb-3"> *@
+                                                            <select class="form-select" data-control="select2" data-dropdown-parent="#AddDataModal" data-placeholder="Select Country" id="search-country">
+                                                                <option value="">Select Country</option>
+                                                                <option value="UM">United States Minor Outlying Islands</option>
+                                                                <option value="US" selected>United States of America</option>
+                                                                <option value="AF">Afghanistan</option>
+                                                                <option value="AX">Åland Islands</option>
+                                                                <option value="AL">Albania</option>
+                                                                <option value="DZ">Algeria</option>
+                                                                <option value="AS">American Samoa</option>
+                                                                <option value="AD">Andorra</option>
+                                                                <option value="AO">Angola</option>
+                                                                <option value="AI">Anguilla</option>
+                                                                <option value="AQ">Antarctica</option>
+                                                                <option value="AG">Antigua and Barbuda</option>
+                                                                <option value="AR">Argentina</option>
+                                                                <option value="AM">Armenia</option>
+                                                                <option value="AW">Aruba</option>
+                                                                <option value="AU">Australia</option>
+                                                                <option value="AT">Austria</option>
+                                                                <option value="AZ">Azerbaijan</option>
+                                                                <option value="BS">Bahamas</option>
+                                                                <option value="BH">Bahrain</option>
+                                                                <option value="BD">Bangladesh</option>
+                                                                <option value="BB">Barbados</option>
+                                                                <option value="BY">Belarus</option>
+                                                                <option value="BE">Belgium</option>
+                                                                <option value="BZ">Belize</option>
+                                                                <option value="BJ">Benin</option>
+                                                                <option value="BM">Bermuda</option>
+                                                                <option value="BT">Bhutan</option>
+                                                                <option value="BO">Bolivia (Plurinational State of)</option>
+                                                                <option value="BQ">Bonaire, Sint Eustatius and Saba</option>
+                                                                <option value="BA">Bosnia and Herzegovina</option>
+                                                                <option value="BW">Botswana</option>
+                                                                <option value="BV">Bouvet Island</option>
+                                                                <option value="BR">Brazil</option>
+                                                                <option value="IO">British Indian Ocean Territory</option>
+                                                                <option value="BN">Brunei Darussalam</option>
+                                                                <option value="BG">Bulgaria</option>
+                                                                <option value="BF">Burkina Faso</option>
+                                                                <option value="BI">Burundi</option>
+                                                                <option value="CV">Cabo Verde</option>
+                                                                <option value="KH">Cambodia</option>
+                                                                <option value="CM">Cameroon</option>
+                                                                <option value="CA">Canada</option>
+                                                                <option value="KY">Cayman Islands</option>
+                                                                <option value="CF">Central African Republic</option>
+                                                                <option value="TD">Chad</option>
+                                                                <option value="CL">Chile</option>
+                                                                <option value="CN">China</option>
+                                                                <option value="CX">Christmas Island</option>
+                                                                <option value="CC">Cocos (Keeling) Islands</option>
+                                                                <option value="CO">Colombia</option>
+                                                                <option value="KM">Comoros</option>
+                                                                <option value="CG">Congo</option>
+                                                                <option value="CD">Congo, Democratic Republic of the</option>
+                                                                <option value="CK">Cook Islands</option>
+                                                                <option value="CR">Costa Rica</option>
+                                                                <option value="CI">Côte d'Ivoire</option>
+                                                                <option value="HR">Croatia</option>
+                                                                <option value="CU">Cuba</option>
+                                                                <option value="CW">Curaçao</option>
+                                                                <option value="CY">Cyprus</option>
+                                                                <option value="CZ">Czechia</option>
+                                                                <option value="DK">Denmark</option>
+                                                                <option value="DJ">Djibouti</option>
+                                                                <option value="DM">Dominica</option>
+                                                                <option value="DO">Dominican Republic</option>
+                                                                <option value="EC">Ecuador</option>
+                                                                <option value="EG">Egypt</option>
+                                                                <option value="SV">El Salvador</option>
+                                                                <option value="GQ">Equatorial Guinea</option>
+                                                                <option value="ER">Eritrea</option>
+                                                                <option value="EE">Estonia</option>
+                                                                <option value="SZ">Eswatini</option>
+                                                                <option value="ET">Ethiopia</option>
+                                                                <option value="FK">Falkland Islands (Malvinas)</option>
+                                                                <option value="FO">Faroe Islands</option>
+                                                                <option value="FJ">Fiji</option>
+                                                                <option value="FI">Finland</option>
+                                                                <option value="FR">France</option>
+                                                                <option value="GF">French Guiana</option>
+                                                                <option value="PF">French Polynesia</option>
+                                                                <option value="TF">French Southern Territories</option>
+                                                                <option value="GA">Gabon</option>
+                                                                <option value="GM">Gambia</option>
+                                                                <option value="GE">Georgia</option>
+                                                                <option value="DE">Germany</option>
+                                                                <option value="GH">Ghana</option>
+                                                                <option value="GI">Gibraltar</option>
+                                                                <option value="GR">Greece</option>
+                                                                <option value="GL">Greenland</option>
+                                                                <option value="GD">Grenada</option>
+                                                                <option value="GP">Guadeloupe</option>
+                                                                <option value="GU">Guam</option>
+                                                                <option value="GT">Guatemala</option>
+                                                                <option value="GG">Guernsey</option>
+                                                                <option value="GN">Guinea</option>
+                                                                <option value="GW">Guinea-Bissau</option>
+                                                                <option value="GY">Guyana</option>
+                                                                <option value="HT">Haiti</option>
+                                                                <option value="HM">Heard Island and McDonald Islands</option>
+                                                                <option value="VA">Holy See</option>
+                                                                <option value="HN">Honduras</option>
+                                                                <option value="HK">Hong Kong</option>
+                                                                <option value="HU">Hungary</option>
+                                                                <option value="IS">Iceland</option>
+                                                                <option value="IN">India</option>
+                                                                <option value="ID">Indonesia</option>
+                                                                <option value="IR">Iran (Islamic Republic of)</option>
+                                                                <option value="IQ">Iraq</option>
+                                                                <option value="IE">Ireland</option>
+                                                                <option value="IM">Isle of Man</option>
+                                                                <option value="IL">Israel</option>
+                                                                <option value="IT">Italy</option>
+                                                                <option value="JM">Jamaica</option>
+                                                                <option value="JP">Japan</option>
+                                                                <option value="JE">Jersey</option>
+                                                                <option value="JO">Jordan</option>
+                                                                <option value="KZ">Kazakhstan</option>
+                                                                <option value="KE">Kenya</option>
+                                                                <option value="KI">Kiribati</option>
+                                                                <option value="KP">Korea (Democratic People's Republic of)</option>
+                                                                <option value="KR">Korea, Republic of</option>
+                                                                <option value="KW">Kuwait</option>
+                                                                <option value="KG">Kyrgyzstan</option>
+                                                                <option value="LA">Lao People's Democratic Republic</option>
+                                                                <option value="LV">Latvia</option>
+                                                                <option value="LB">Lebanon</option>
+                                                                <option value="LS">Lesotho</option>
+                                                                <option value="LR">Liberia</option>
+                                                                <option value="LY">Libya</option>
+                                                                <option value="LI">Liechtenstein</option>
+                                                                <option value="LT">Lithuania</option>
+                                                                <option value="LU">Luxembourg</option>
+                                                                <option value="MO">Macao</option>
+                                                                <option value="MK">Macedonia, the former Yugoslav Republic of</option>
+                                                                <option value="MG">Madagascar</option>
+                                                                <option value="MW">Malawi</option>
+                                                                <option value="MY">Malaysia</option>
+                                                                <option value="MV">Maldives</option>
+                                                                <option value="ML">Mali</option>
+                                                                <option value="MT">Malta</option>
+                                                                <option value="MH">Marshall Islands</option>
+                                                                <option value="MQ">Martinique</option>
+                                                                <option value="MR">Mauritania</option>
+                                                                <option value="MU">Mauritius</option>
+                                                                <option value="YT">Mayotte</option>
+                                                                <option value="MX">Mexico</option>
+                                                                <option value="FM">Micronesia (Federated States of)</option>
+                                                                <option value="MD">Moldova, Republic of</option>
+                                                                <option value="MC">Monaco</option>
+                                                                <option value="MN">Mongolia</option>
+                                                                <option value="ME">Montenegro</option>
+                                                                <option value="MS">Montserrat</option>
+                                                                <option value="MA">Morocco</option>
+                                                                <option value="MZ">Mozambique</option>
+                                                                <option value="MM">Myanmar</option>
+                                                                <option value="NA">Namibia</option>
+                                                                <option value="NR">Nauru</option>
+                                                                <option value="NP">Nepal</option>
+                                                                <option value="NL">Netherlands</option>
+                                                                <option value="NC">New Caledonia</option>
+                                                                <option value="NZ">New Zealand</option>
+                                                                <option value="NI">Nicaragua</option>
+                                                                <option value="NE">Niger</option>
+                                                                <option value="NG">Nigeria</option>
+                                                                <option value="NU">Niue</option>
+                                                                <option value="NF">Norfolk Island</option>
+                                                                <option value="MP">Northern Mariana Islands</option>
+                                                                <option value="NO">Norway</option>
+                                                                <option value="OM">Oman</option>
+                                                                <option value="PK">Pakistan</option>
+                                                                <option value="PW">Palau</option>
+                                                                <option value="PS">Palestine, State of</option>
+                                                                <option value="PA">Panama</option>
+                                                                <option value="PG">Papua New Guinea</option>
+                                                                <option value="PY">Paraguay</option>
+                                                                <option value="PE">Peru</option>
+                                                                <option value="PH">Philippines</option>
+                                                                <option value="PN">Pitcairn</option>
+                                                                <option value="PL">Poland</option>
+                                                                <option value="PT">Portugal</option>
+                                                                <option value="PR">Puerto Rico</option>
+                                                                <option value="QA">Qatar</option>
+                                                                <option value="RE">Réunion</option>
+                                                                <option value="RO">Romania</option>
+                                                                <option value="RU">Russian Federation</option>
+                                                                <option value="RW">Rwanda</option>
+                                                                <option value="BL">Saint Barthélemy</option>
+                                                                <option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
+                                                                <option value="KN">Saint Kitts and Nevis</option>
+                                                                <option value="LC">Saint Lucia</option>
+                                                                <option value="MF">Saint Martin (French part)</option>
+                                                                <option value="PM">Saint Pierre and Miquelon</option>
+                                                                <option value="VC">Saint Vincent and the Grenadines</option>
+                                                                <option value="WS">Samoa</option>
+                                                                <option value="SM">San Marino</option>
+                                                                <option value="ST">Sao Tome and Principe</option>
+                                                                <option value="SA">Saudi Arabia</option>
+                                                                <option value="SN">Senegal</option>
+                                                                <option value="RS">Serbia</option>
+                                                                <option value="SC">Seychelles</option>
+                                                                <option value="SL">Sierra Leone</option>
+                                                                <option value="SG">Singapore</option>
+                                                                <option value="SX">Sint Maarten (Dutch part)</option>
+                                                                <option value="SK">Slovakia</option>
+                                                                <option value="SI">Slovenia</option>
+                                                                <option value="SB">Solomon Islands</option>
+                                                                <option value="SO">Somalia</option>
+                                                                <option value="ZA">South Africa</option>
+                                                                <option value="GS">South Georgia and the South Sandwich Islands</option>
+                                                                <option value="SS">South Sudan</option>
+                                                                <option value="ES">Spain</option>
+                                                                <option value="LK">Sri Lanka</option>
+                                                                <option value="SD">Sudan</option>
+                                                                <option value="SR">Suriname</option>
+                                                                <option value="SJ">Svalbard and Jan Mayen</option>
+                                                                <option value="SE">Sweden</option>
+                                                                <option value="CH">Switzerland</option>
+                                                                <option value="SY">Syrian Arab Republic</option>
+                                                                <option value="TW">Taiwan, Province of China</option>
+                                                                <option value="TJ">Tajikistan</option>
+                                                                <option value="TZ">Tanzania, United Republic of</option>
+                                                                <option value="TH">Thailand</option>
+                                                                <option value="TL">Timor-Leste</option>
+                                                                <option value="TG">Togo</option>
+                                                                <option value="TK">Tokelau</option>
+                                                                <option value="TO">Tonga</option>
+                                                                <option value="TT">Trinidad and Tobago</option>
+                                                                <option value="TN">Tunisia</option>
+                                                                <option value="TR">Turkey</option>
+                                                                <option value="TM">Turkmenistan</option>
+                                                                <option value="TC">Turks and Caicos Islands</option>
+                                                                <option value="TV">Tuvalu</option>
+                                                                <option value="UG">Uganda</option>
+                                                                <option value="UA">Ukraine</option>
+                                                                <option value="AE">United Arab Emirates</option>
+                                                                <option value="GB">United Kingdom</option>
+                                                                <option value="UY">Uruguay</option>
+                                                                <option value="UZ">Uzbekistan</option>
+                                                                <option value="VU">Vanuatu</option>
+                                                                <option value="VE">Venezuela (Bolivarian Republic of)</option>
+                                                                <option value="VN">Viet Nam</option>
+                                                                <option value="VG">Virgin Islands (British)</option>
+                                                                <option value="VI">Virgin Islands (U.S.)</option>
+                                                                <option value="WF">Wallis and Futuna</option>
+                                                                <option value="EH">Western Sahara</option>
+                                                                <option value="YE">Yemen</option>
+                                                                <option value="ZM">Zambia</option>
+                                                                <option value="ZW">Zimbabwe</option>
+                                                            </select>
+                                                        @* </div> *@
+                                                        <div class="col-1 historyCard "></div>
+                                                    </div>
+                                                    <div class="row my-3">
+                                                        <div class="col mb-2">
+                                                            <label class="label-control"> Computed Mileage: <span
+                                                                    id="computedMileage"></span><span class="d-none"
+                                                                    id="mileshide">&nbsp;Miles</span></label>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="row">
+                                                                <div class="col validate_Details">
+                                                                    <label class="label-control required">Actual Mileage:</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="ActualMile" name="ActualMile"
+                                                                        onkeypress="return isNumericDecimal(this,event)"
+                                                                        oninput="return zeronotAllow()" 
+                                                                        placeholder="Actual Mileage" maxlength="7"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-4 results-paneltag d-none">
+                                                    <!-- Search Results -->
+                                                    <label class="form-label fw-bold text-primary results-paneltag d-none">Search Results</label>
+                                                    <div class="list-group scroll bg-secondary results-paneltag d-none" id="results-panel" tabindex="102" style="height: 250px; overflow-y: auto;">
+                                                        <span class="px-3 text-muted py-4">Search location to get result.</span>
+                                                    </div>
+                                                    <table style="display: none;">
+                                                        <tr>
+                                                            <td>From:</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>To:</td>
+                                                            <td></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <table id="truckOptions">
+                                                                    <tr>
+                                                                        <td colspan="2"><b>Truck Options</b></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Vehicle Width (meters):</td>
+                                                                        <td>
+                                                                            <input type="number" id="vehicleWidth"
+                                                                                title="Vehicle Width (meters)" />
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Vehicle Height (meters):</td>
+                                                                        <td>
+                                                                            <input type="number" id="vehicleHeight"
+                                                                                title="Vehicle Height (meters)" />
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Vehicle Length (meters):</td>
+                                                                        <td>
+                                                                            <input type="number" id="vehicleLength"
+                                                                                title="Vehicle Length (meters)" />
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Vehicle Weight (kg):</td>
+                                                                        <td>
+                                                                            <input type="number" id="vehicleWeight"
+                                                                                title="Vehicle Weight (kg)" />
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Vehicle Load Type:</td>
+                                                                        <td>
+                                                                            <select id="vehicleLoadType"
+                                                                                title="Vehicle Load Type">
+                                                                                <option value="" />
+                                                                                <option value="USHazmatClass1" />
+                                                                                Explosives
+                                                                                <option value="USHazmatClass2" />
+                                                                                Compressed gas
+                                                                                <option value="USHazmatClass3" />
+                                                                                Flammable liquids
+                                                                                <option value="USHazmatClass4" />
+                                                                                Flammable solids
+                                                                                <option value="USHazmatClass5" />
+                                                                                Oxidizers
+                                                                                <option value="USHazmatClass6" />Poisons
+                                                                                <option value="USHazmatClass7" />
+                                                                                Radioactive
+                                                                                <option value="USHazmatClass8" />
+                                                                                Corrosives
+                                                                                <option value="USHazmatClass9" />
+                                                                                Miscellaneous
+                                                                                <option value="otherHazmatExplosive" />
+                                                                                Explosives
+                                                                                <option value="otherHazmatGeneral" />
+                                                                                Miscellaneous
+                                                                                <option
+                                                                                    value="otherHazmatHarmfulToWater" />
+                                                                                Harmful
+                                                                                to water
+                                                                            </select>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2"><b>Scenarios:</b></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td><br /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2"><br /></td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="row mt-5" id="output"></div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Right Side: Map -->
+                                            <div class="col-lg-8 col-12">
+                                                <div class="position-relative">
+                                                    <div id="myMap" class="w-100 rounded-3 shadow-sm" style="height: 480px;" tabindex="200" role="application">
+                                                        @* <button title="Locate Me" id="locate-me-button" type="button" class="btn btn-sm  btn-dark shadow px-2 py-1" style="position: absolute; z-index: 1000; top: 10px; left: 10px;">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" id="locate-me-icon" width="16" height="16" fill="currentColor" class="bi bi-crosshair" viewBox="0 0 16 16">
+                                                                <path d="M8.5.5a.5.5 0 0 0-1 0v.518A7 7 0 0 0 1.018 7.5H.5a.5.5 0 0 0 0 1h.518A7 7 0 0 0 7.5 14.982v.518a.5.5 0 0 0 1 0v-.518A7 7 0 0 0 14.982 8.5h.518a.5.5 0 0 0 0-1h-.518A7 7 0 0 0 8.5 1.018zm-6.48 7A6 6 0 0 1 7.5 2.02v.48a.5.5 0 0 0 1 0v-.48a6 6 0 0 1 5.48 5.48h-.48a.5.5 0 0 0 0 1h.48a6 6 0 0 1-5.48 5.48v-.48a.5.5 0 0 0-1 0v.48A6 6 0 0 1 2.02 8.5h.48a.5.5 0 0 0 0-1zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                                            </svg>
+                                                        </button>
+                                                        <div class="row" style="position: absolute; z-index: 1000; top: 10px; left: 50%; transform: translateX(-50%);">
+                                                            <select id="resolutionSelector" class="form-select py-0 w-100 shadow-sm" onchange="reloadBoundary()" title="Select Map Resolution">
+                                                                <option value="small">Small</option>
+                                                                <option value="medium" selected="">Medium</option>
+                                                                <option value="large">Large</option>
+                                                                <option value="huge">Huge</option>
+                                                                </select>
+                                                        </div> *@
+                                                    </div>
+                                                    <noscript>You need to enable JavaScript to run this app.</noscript>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer py-4">
+                <div class="text-end">
+                    <button id="downloadBtn" type="button" title="Dowmload Map"
+                        class="button-base text-white button_save me-5 d-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-download" viewBox="0 0 16 16">
+                            <path
+                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                            <path
+                                d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                        </svg>
+                        Dowmload Map</button>
+                    <button title="Back" type="button" class="button-base-white me-5"
+                        onclick="backbtn('model')" aria-label="Close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5" />
+                        </svg>&nbsp;
+                        Back</button>
+                    <button title="Add" type="submit" class="button-base text-white button_save"
+                        id="mileageClaims_create_Add"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                            <path
+                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                        </svg>&nbsp;
+                        Add</button>
+                    <button title="Save" type="submit" class="button-base text-white button_save d-none"
+                        id="mileageClaims_create_Update">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M16.6654 5L7.4987 14.1667L3.33203 10" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>&nbsp;
+                        Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="add_shortcut">
+    <div class="modal-dialog" id="mainDivAddshortcut">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="modal-title-text">Add Favourite Shortcut</h1>
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                    aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+                <!--end::Close-->
+            </div>
+            <div class="modal-body">
+                <div class="row row-cols-1 row-cols-sm-1 row-cols-lg-1 row-cols-md-1 g-2 g-lg-3">
+                    <div class="col form_Validation">
+                        <label class="label-control fw-bold required mb-1">Shortcut Name
+                        </label>
+                        <input class="form-control " name="title" placeholder="Enter Shortcut Name" maxlength="20"
+                            id="titleinput" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button title="Cancel" type="button" class="btn button-base-white" data-bs-dismiss="modal"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                    </svg>&nbsp;Cancel</button>
+                <button title="Save" title="Save" type="button" class="btn button-base text-white"
+                    id="shotcut_Savebtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-floppy me-1" viewBox="0 0 16 16">
+                        <path d="M11 2H9v3h2z"></path>
+                        <path
+                            d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z">
+                        </path>&nbsp;
+                    </svg>Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        var alertMessage = @(Html.Raw(JsonConvert.SerializeObject(ViewData["Alert"])));
+        helpData = @(Html.Raw(JsonConvert.SerializeObject(ViewData["HelpPageDetails"])));
+        let projects = @(Html.Raw(JsonConvert.SerializeObject(@ViewBag.Projects)));
+        let MileageList = @(Html.Raw(JsonConvert.SerializeObject(ViewData["MileageList"])));
+        let returnFromDate = @(Html.Raw(JsonConvert.SerializeObject(ViewData["CatchFromDate"])));
+        let returnToDate = @(Html.Raw(JsonConvert.SerializeObject(ViewData["CatchToDate"])));
+        @* let MileageRate = @(Html.Raw(JsonConvert.SerializeObject(ViewData["MileageRate"]))); *@
+        var HoverPrompts = @(Html.Raw(JsonConvert.SerializeObject(ViewData["HoverPrompts"])));
+
+        if (alertMessage != null) {
+            let globArr = [];
+            let data = alertMessage.split('|');
+            data.forEach(function (obj) {
+                globArr.push(obj);
+            });
+            let message = '';
+            for (i = 0; i < globArr.length - 1; i++) {
+                message += i + 1 + ". " + globArr[i].split(";").at(-1) + "\n";
+            }
+            if (message !== '' && message !== null) {
+                Swal.fire({
+                    title: message,
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok",
+                    customClass: {
+                        confirmButton: "btn btn-sm button-base"
+                    }
+                });
+            }
+        }
+    </script>
+
+    <script src="~/js/mileageclaims/create.js"></script>
+    <script src="~/js/mileageclaims/map.js"></script>
+    @* <script src="~/js/mileageclaims/displaymap.js"></script> *@
+
+}
