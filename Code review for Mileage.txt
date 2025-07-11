@@ -1,0 +1,125 @@
+ Code Review For Mileage Claim Creation
+	
+1. svgIconiconfromTbx.addEventListener('click', () => { ... })
+    This adds a click event listener to the element svgIconiconfromTbx (likely an SVG icon near the "from" input box).
+    When clicked, it:
+        - Sets focus to the input field inputFieldfromTbx so the user can start typing immediately.
+        - Sets a variable serachInputIdForMap to 'fromTbx' to indicate that the "from" input box is active.
+        - Calls the function searchInputKeyup('fromTbx') to simulate or trigger search-related logic for that input.
+		
+2. svgIconiconfromTbx.addEventListener('click', () => { ... })
+    This adds a click event listener to the element svgIconiconfromTbx (likely an SVG icon near the "to" input box).
+    When clicked, it:
+        - Sets focus on the "to" input field inputFieldtoTb.
+        - Sets serachInputIdForMap to 'toTbx' to indicate the "to" input is active.
+        - Calls searchInputKeyup('toTbx') to handle search logic for the "to" input.
+		
+3. function searchInputKeyup(id) { ... }
+    This function handles search behavior when the user types in either input box.
+	    - It takes an argument id which will be either 'fromTbx' or 'toTbx', specifying which input box triggered this.
+
+    Steps inside the function:
+	    1.Show loader if both inputs have values:
+		2.Get the input element by id:
+		    const searchInput = document.getElementById(id);
+		3.Set centerMapOnResults to false initially:
+		    centerMapOnResults = false;
+		4.Check if input length is 3 or more characters:
+		    If input is at least 3 characters:
+			    - centerMapOnResults is set to true.
+				- A setTimeout of 250 ms waits before continuing, probably to avoid rapid firing while typing.
+				- Inside the timeout, it checks if the length of the input is unchanged (prospectSearchInputLength === searchInput.value.length) to avoid running search if user kept typing.
+                - Calls a search(id) function to perform the search for that input box.
+				- Retrieves current values of "from" and "to" inputs.
+				- If "from" has a value but "to" is empty, runs validation for the "MapTo" field.
+				- Otherwise, tries to call calculateDirections(), presumably to compute the route between the two points.
+				- If calculateDirections() fails, hides the loader.
+				
+            If input is less than 3 characters, clears the HTML inside the element with ID results-panel.
+        5.Update the global variable tracking the input length:
+		    prospectSearchInputLength = searchInput.value.length;
+
+4. calculateDirections() 
+    - Clears previous route data and UI outputs.
+    - Gets the “from” and “to” addresses from input fields.
+    - Shows a loading spinner.
+    - Converts the “from” and “to” addresses into coordinates (geocoding).
+    - Places start and end pins on the map.
+    - Adjusts the map view to fit both pins.
+    - Builds a routing request URL and sends it.
+	- When the route data returns:
+        - Shows route duration and distance. 
+        - Draws the route on the map.
+        - Updates UI fields with mileage and cost calculations. 
+        - Handles some UI notes depending on the page state.
+    - Hides the loading spinner when done.
+	
+5.geocodeQuery(query, callback)
+    - Takes an address or coordinates (query) and converts it into geographic coordinates.
+    - If the query is already coordinates, parses them directly.
+    - Otherwise, makes a geocoding API request.
+    - Calls the provided callback with the resulting coordinates or null if failed. 
+    - Shows/hides loading spinner during this process.
+
+6.addRouteToMap(route, strokeColor)
+    - Takes route data (with legs and points) and a color for the route line.
+    - Extracts coordinates from the route points.
+    - Adds pins/labels on the map for road names and landmarks.
+    - Draws the route line on the map in the specified color.
+    - Adjusts the map view to fit the full route.
+	
+After click on ADD btn
+1.$(modelSubmitButton).on("click", function (e) {})
+    - Prevents default submission.
+    - Validates the form using validator2.
+    - Captures computed mileage and the active tab.
+    - Shows loader and takes a screenshot via mapImageUrl() if mileage exists.
+    - Calls mileageClaims_Add or mileageClaims_Update based on the button clicked.
+    - If toggle is checked, delegates to handlePendingEntities.
+
+2. async function mapImageUrl() {}
+    - Captures screenshot of #captureScreenshot using HTML2Canvas.
+    - Converts canvas to Blob and wraps it in a File object.
+    - Hides the loader spinner and returns the File.	
+
+3. function mileageClaims_Add() { … }
+    - Prepares project, cluster, company details.
+    - Handles single or multiple entity selections.
+    - Detects duplicate entries with alert via SweetAlert if found.
+    - Organizes data into structured objects with attributes like:  
+	    - MileageDate, Amount, Start/End location, Description, ComputedMileage, Attachment (screenshot), etc.
+    - Pushes new entries into mileageClaimsArray.
+    - Calls mileageClaimsTable() to re-render the table.
+    - Clears form input values and updates UI state.
+
+4. function mileageClaimsTable() { … }
+    - Iterates over mileageClaimsArray and builds an HTML table:
+	    - Calculates row and column spans for companies, clusters, projects.
+		- Renders each entry with table cells, hidden form inputs, file attachment previews, edit/delete buttons.
+    - Attaches captured screenshot file into hidden file input for form submission.
+    - Rebinds date pickers and formats numeric amounts.	
+
+5. function dataURLToBlob(dataUrl) {}
+   - Helper function that turns a base64-encoded Data URL into a Blob.
+   
+6. function mileageClaims_Update() { ... }
+    - Resets change tracking flag and formats amount.
+    - Uses hdautoId to locate the entry index.
+    - Handles both multi-entity and single-entity updates:
+        Validates against duplicates.
+        Updates fields: date, mileage, amount, description, attachment, locations, flags.
+        If multi-entity, merges or appends new entities to arrays.
+        If single, directly sets arrays for company/cluster/project.
+    - Closes modal and refreshes table by calling mileageClaimsTable()   
+ 
+7. async function handlePendingEntities(IdName) { ... }
+    - Detects whether the user has selected company/project but not yet added them.
+    - If yes, shows confirmation prompt via SweetAlert:
+        - On confirmation, performs the same workflow as direct add/update (with screenshot).
+    - If none are pending, just proceeds to screenshot capture and method call.
+
+8. function dispalyImage(imageFile, key) {}
+    - Reads the imageFile with FileReader.
+    - Sets the preview container’s background to the image.
+    - Updates the download link (href) for the user to save it.
+    - If there's no file, clears the preview.

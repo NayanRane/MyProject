@@ -1,0 +1,159 @@
+🛣️ Roadmap Overview
+📌 Phase 1: Master JavaScript (4–6 weeks)
+📌 Phase 2: Learn React (4–6 weeks)
+📌 Phase 3: Add TypeScript (2–3 weeks)
+📌 Bonus: Real-World Projects + Interview Prep
+🔹 Phase 1: Master JavaScript (4–6 weeks)
+✅ Week 1–2: Basics
+Variables (let, const)
+
+Data types, Operators
+
+Conditionals (if, switch)
+
+Loops (for, while, forEach)
+
+Functions (declarations, expressions, arrow functions)
+
+📚 Resources:
+
+MDN JavaScript Guide
+
+YouTube: "JavaScript Full Course – freeCodeCamp"
+
+✅ Week 3–4: Intermediate
+Arrays & Objects (methods like map, filter, reduce)
+
+Scope, Hoisting, Closures
+
+DOM Manipulation (via vanilla JS)
+
+Events and Event Listeners
+
+JSON and Local Storage
+
+📚 Practice:
+
+Build: To-do List, Calculator, Form Validator
+
+✅ Week 5–6: Advanced JavaScript
+Promises, async/await
+
+ES6+ Features (Destructuring, Spread/Rest, Modules)
+
+Callbacks & Higher-order functions
+
+The Event Loop, this, bind, call, apply
+
+Fetch API, working with REST APIs
+
+📚 Projects:
+
+Weather App (API)
+
+Infinite Scroll Gallery
+
+🔹 Phase 2: Learn React (4–6 weeks)
+✅ Week 1: Core Concepts
+create-react-app, JSX, Functional Components
+
+useState, useEffect, Props, Events
+
+Component Communication (Parent → Child, Child → Parent)
+
+📚 Resource:
+
+React Official Docs
+
+YouTube: "React JS Full Course – freeCodeCamp"
+
+✅ Week 2–3: Intermediate React
+Lists and Keys, Forms
+
+Conditional Rendering
+
+useRef, useContext
+
+Component reusability
+
+✅ Week 4: React Router & Hooks
+Routing with react-router-dom
+
+Custom Hooks
+
+Error boundaries
+
+📚 Projects:
+
+Blog App with Routing
+
+User Dashboard
+
+✅ Week 5–6: Advanced React
+Lifting state up
+
+useReducer
+
+Performance optimization (memoization, lazy loading)
+
+Global State: Context API, Redux Toolkit (optional)
+
+📚 Project:
+
+E-commerce Store (with cart, filters, auth)
+
+🔹 Phase 3: Learn TypeScript (2–3 weeks)
+✅ Week 1: Basics
+Types: string, number, boolean, any, void
+
+Interfaces & Types
+
+Functions with types
+
+Optional, Union, Intersection types
+
+✅ Week 2: TypeScript + React
+Typing Props & State
+
+Generic components
+
+Type-safe API calls (e.g., with Axios)
+
+Avoiding any — building strong types
+
+📚 Resource:
+
+TypeScript for React Developers
+
+YouTube: "React + TypeScript Crash Course – Traversy Media"
+
+⭐ Bonus: Build Projects + Interview Prep (2–4 weeks)
+🔨 Real-World Projects:
+Task Manager
+
+Movie App with API
+
+Blog CMS (React + TypeScript)
+
+🧠 Practice:
+Code on LeetCode (easy-medium JS)
+
+FrontendMentor.io challenges
+
+Learn system design for frontend (basics)
+
+✅ Tools You Should Learn Alongside:
+Git & GitHub
+
+VSCode (extensions, debugging)
+
+Prettier & ESLint
+
+Chrome DevTools
+
+Postman for APIs
+
+Deployment: Vercel, Netlify
+
+🚀 Final Tip:
+Build a portfolio with 3–4 deployed projects and push all your code to GitHub. This is key for MNC recruiters.
