@@ -1,122 +1,302 @@
-<!DOCTYPE html>
-<html>
+const data = [
+  {
+    entityname: "Art layenderkar",
+    month: 1,
+    year: 2024,
+    periodicity: "Jan-2024",
+    subsitution: "manualupdate",
+    slcount: 123,
+    stcount: 32,
+    slpercentage: 23,
+    stpercentage: 65,
+    cltotal: 12,
+    sttotal: 64,
+  },
+  {
+    entityname: "Art layenderkar",
+    month: 1,
+    year: 2024,
+    periodicity: "Jan-2024",
+    subsitution: "zhl",
+    slcount: 133,
+    stcount: 22,
+    slpercentage: 33,
+    stpercentage: 15,
+    cltotal: 120,
+    sttotal: 34,
+  },
+  {
+    entityname: "Garben",
+    month: 1,
+    year: 2024,
+    periodicity: "Jan-2024",
+    subsitution: "err",
+    slcount: 13,
+    stcount: 32,
+    slpercentage: 53,
+    stpercentage: 25,
+    cltotal: 20,
+    sttotal: 54,
+  },
+  {
+    entityname: "Garben",
+    month: 1,
+    year: 2024,
+    periodicity: "Jan-2024",
+    subsitution: "zhl",
+    slcount: 213,
+    stcount: 321,
+    slpercentage: 38,
+    stpercentage: 65,
+    cltotal: 120,
+    sttotal: 222,
+  },
+  {
+    entityname: "Moonstone",
+    month: 1,
+    year: 2024,
+    periodicity: "Jan-2024",
+    subsitution: "manualupdate",
+    slcount: 173,
+    stcount: 21,
+    slpercentage: 23,
+    stpercentage: 50,
+    cltotal: 120,
+    sttotal: 64,
+  },
+  {
+    entityname: "Moonstone",
+    month: 1,
+    year: 2024,
+    periodicity: "Jan-2024",
+    subsitution: "err",
+    slcount: 123,
+    stcount: 32,
+    slpercentage: 23,
+    stpercentage: 65,
+    cltotal: 12,
+    sttotal: 64,
+  },
+  {
+    entityname: "Art layenderkar",
+    month: 2,
+    year: 2024,
+    periodicity: "Feb-2024",
+    subsitution: "sub",
+    slcount: 123,
+    stcount: 32,
+    slpercentage: 23,
+    stpercentage: 65,
+    cltotal: 12,
+    sttotal: 64,
+  },
+  {
+    entityname: "Garben",
+    month: 2,
+    year: 2024,
+    periodicity: "Feb-2024",
+    subsitution: "std",
+    slcount: 163,
+    stcount: 82,
+    slpercentage: 23,
+    stpercentage: 65,
+    cltotal: 12,
+    sttotal: 64,
+  },
+  {
+    entityname: "Garben",
+    month: 2,
+    year: 2024,
+    periodicity: "Feb-2024",
+    subsitution: "zhl",
+    slcount: 121,
+    stcount: 22,
+    slpercentage: 23,
+    stpercentage: 65,
+    cltotal: 12,
+    sttotal: 64,
+  },
+  {
+    entityname: "Moonstone",
+    month: 3,
+    year: 2024,
+    periodicity: "Feb-2024",
+    subsitution: "err",
+    slcount: 103,
+    stcount: 32,
+    slpercentage: 23,
+    stpercentage: 65,
+    cltotal: 12,
+    sttotal: 64,
+  },
+  {
+    entityname: "Moonstone",
+    month: 3,
+    year: 2024,
+    periodicity: "Feb-2024",
+    subsitution: "tss",
+    slcount: 103,
+    stcount: 32,
+    slpercentage: 23,
+    stpercentage: 65,
+    cltotal: 12,
+    sttotal: 64,
+  },
+  {
+    entityname: "Art layenderkar",
+    month: 1,
+    year: 2025,
+    periodicity: "Jan-2025",
+    subsitution: "std",
+    slcount: 113,
+    stcount: 32,
+    slpercentage: 63,
+    stpercentage: 15,
+    cltotal: 12,
+    sttotal: 64,
+  },
+  {
+    entityname: "Art layenderkar",
+    month: 1,
+    year: 2025,
+    periodicity: "Jan-2025",
+    subsitution: "zhl",
+    slcount: 111,
+    stcount: 276,
+    slpercentage: 23,
+    stpercentage: 35,
+    cltotal: 12,
+    sttotal: 64,
+  },
+  {
+    entityname: "Moonstone",
+    month: 2,
+    year: 2025,
+    periodicity: "Feb-2025",
+    subsitution: "manualupdate",
+    slcount: 130,
+    stcount: 12,
+    slpercentage: 11,
+    stpercentage: 45,
+    cltotal: 353,
+    sttotal: 32,
+  },
+];
 
-<head>
-    <title>Bind Pivot Table</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+const substitutions = [...new Set(data.map((d) => d.subsitution))];
 
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 6px;
-            text-align: center;
-        }
+const groupKey = (d) => `${d.entityname}__${d.periodicity}`;
+const grouped = {};
 
-        th {
-            background-color: #f0f0f0;
-        }
+data.forEach((d) => {
+  const key = groupKey(d);
+  if (!grouped[key]) {
+    grouped[key] = {
+      entityname: d.entityname,
+      periodicity: d.periodicity,
+      cltotal: d.cltotal,
+      sttotal: d.sttotal,
+      subs: {},
+    };
+  }
+  grouped[key].subs[d.subsitution] = {
+    sl: d.slcount,
+    slp: d.slpercentage,
+    st: d.stcount,
+    stp: d.stpercentage,
+  };
+});
 
-        .header-group {
-            background-color: #e0e0e0;
-        }
-    </style>
-</head>
+// function generateTable() {
+//     const table = document.createElement("table");
 
-<body>
+//     // First header row
+//     const header1 = document.createElement("tr");
+//     header1.innerHTML = `<th rowspan="2">Entity</th><th rowspan="2">Periodicity</th>`;
+//     substitutions.forEach(sub => {
+//         header1.innerHTML += `<th colspan="4">${sub}</th>`;
+//     });
+//     header1.innerHTML += `<th rowspan="2">cltotal</th><th rowspan="2">sttotal</th>`;
+//     table.appendChild(header1);
 
-    <div id="tableContainer"></div>
+//     // Second header row
+//     const header2 = document.createElement("tr");
+//     substitutions.forEach(() => {
+//         header2.innerHTML += `<th>sl</th><th>sl%</th><th>st</th><th>st%</th>`;
+//     });
+//     table.appendChild(header2);
 
-    <script>
-        const data = [
-            { entityname: 'Art layenderkar', month: 1, year: 2024, periodicity: 'Jan-2024', subsitution: 'manualupdate', slcount: 123, stcount: 32, slpercentage: 23, stpercentage: 65, cltotal: 12, sttotal: 64 },
-            { entityname: 'Art layenderkar', month: 1, year: 2024, periodicity: 'Jan-2024', subsitution: 'zhl', slcount: 133, stcount: 22, slpercentage: 33, stpercentage: 15, cltotal: 120, sttotal: 34 },
-            { entityname: 'Garben', month: 1, year: 2024, periodicity: 'Jan-2024', subsitution: 'err', slcount: 13, stcount: 32, slpercentage: 53, stpercentage: 25, cltotal: 20, sttotal: 54 },
-            { entityname: 'Garben', month: 1, year: 2024, periodicity: 'Jan-2024', subsitution: 'zhl', slcount: 213, stcount: 321, slpercentage: 38, stpercentage: 65, cltotal: 120, sttotal: 222 },
-            { entityname: 'Moonstone', month: 1, year: 2024, periodicity: 'Jan-2024', subsitution: 'manualupdate', slcount: 173, stcount: 21, slpercentage: 23, stpercentage: 50, cltotal: 120, sttotal: 64 },
-            { entityname: 'Moonstone', month: 1, year: 2024, periodicity: 'Jan-2024', subsitution: 'err', slcount: 123, stcount: 32, slpercentage: 23, stpercentage: 65, cltotal: 12, sttotal: 64 },
-            { entityname: 'Art layenderkar', month: 2, year: 2024, periodicity: 'Feb-2024', subsitution: 'sub', slcount: 123, stcount: 32, slpercentage: 23, stpercentage: 65, cltotal: 12, sttotal: 64 },
-            { entityname: 'Garben', month: 2, year: 2024, periodicity: 'Feb-2024', subsitution: 'std', slcount: 163, stcount: 82, slpercentage: 23, stpercentage: 65, cltotal: 12, sttotal: 64 },
-            { entityname: 'Garben', month: 2, year: 2024, periodicity: 'Feb-2024', subsitution: 'zhl', slcount: 121, stcount: 22, slpercentage: 23, stpercentage: 65, cltotal: 12, sttotal: 64 },
-            { entityname: 'Moonstone', month: 3, year: 2024, periodicity: 'Feb-2024', subsitution: 'err', slcount: 103, stcount: 32, slpercentage: 23, stpercentage: 65, cltotal: 12, sttotal: 64 },
-            { entityname: 'Moonstone', month: 3, year: 2024, periodicity: 'Feb-2024', subsitution: 'tss', slcount: 103, stcount: 32, slpercentage: 23, stpercentage: 65, cltotal: 12, sttotal: 64 },
-            { entityname: 'Art layenderkar', month: 1, year: 2025, periodicity: 'Jan-2025', subsitution: 'std', slcount: 113, stcount: 32, slpercentage: 63, stpercentage: 15, cltotal: 12, sttotal: 64 },
-            { entityname: 'Art layenderkar', month: 1, year: 2025, periodicity: 'Jan-2025', subsitution: 'zhl', slcount: 111, stcount: 276, slpercentage: 23, stpercentage: 35, cltotal: 12, sttotal: 64 },
-            { entityname: 'Moonstone', month: 2, year: 2025, periodicity: 'Feb-2025', subsitution: 'manualupdate', slcount: 130, stcount: 12, slpercentage: 11, stpercentage: 45, cltotal: 353, sttotal: 32 }
-        ];
+//     // Body rows
+//     Object.values(grouped).forEach(row => {
+//         let cltotal = 0;
+//         let sttotal = 0;
 
-        const substitutions = [...new Set(data.map(d => d.subsitution))];
+//         const tr = document.createElement("tr");
+//         tr.innerHTML = `<td>${row.entityname}</td><td>${row.periodicity}</td>`;
 
-        const groupKey = (d) => `${d.entityname}__${d.periodicity}`;
-        const grouped = {};
+//         substitutions.forEach(sub => {
+//             const val = row.subs[sub] || { sl: 0, slp: 0, st: 0, stp: 0 };
+//             cltotal += val.sl;
+//             sttotal += val.st;
+//             tr.innerHTML += `<td>${val.sl}</td><td>${val.slp}</td><td>${val.st}</td><td>${val.stp}</td>`;
+//         });
 
-        data.forEach(d => {
-            const key = groupKey(d);
-            if (!grouped[key]) {
-                grouped[key] = {
-                    entityname: d.entityname,
-                    periodicity: d.periodicity,
-                    cltotal: d.cltotal,
-                    sttotal: d.sttotal,
-                    subs: {}
-                };
-            }
-            grouped[key].subs[d.subsitution] = {
-                sl: d.slcount,
-                slp: d.slpercentage,
-                st: d.stcount,
-                stp: d.stpercentage
-            };
-        });
+//         tr.innerHTML += `<td>${cltotal}</td><td>${sttotal}</td>`;
+//         table.appendChild(tr);
+//     });
 
-        function generateTable() {
-            const table = document.createElement("table");
+//     document.getElementById("tableContainer").appendChild(table);
+// }
 
-            // First header row
-            const header1 = document.createElement("tr");
-            header1.innerHTML = `<th rowspan="2">Entity</th><th rowspan="2">Periodicity</th>`;
-            substitutions.forEach(sub => {
-                header1.innerHTML += `<th colspan="4">${sub}</th>`;
-            });
-            header1.innerHTML += `<th rowspan="2">cltotal</th><th rowspan="2">sttotal</th>`;
-            table.appendChild(header1);
+function generateTable() {
+  const table = document.createElement("table");
 
-            // Second header row
-            const header2 = document.createElement("tr");
-            substitutions.forEach(() => {
-                header2.innerHTML += `<th>sl</th><th>sl%</th><th>st</th><th>st%</th>`;
-            });
-            table.appendChild(header2);
+  // 🔹 HEADER ROW 1 — Substitution types + "Total" label
+  const header1 = document.createElement("tr");
+  header1.innerHTML = `
+    <th rowspan="2">Entity</th>
+    <th rowspan="2">Periodicity</th>
+  `;
+  substitutions.forEach(sub => {
+    header1.innerHTML += `<th colspan="4">${sub}</th>`;
+  });
+  header1.innerHTML += `<th colspan="2">Total</th>`; // Total above cltotal and sttotal
+  table.appendChild(header1);
 
-            // Body rows
-            Object.values(grouped).forEach(row => {
-                let cltotal = 0;
-                let sttotal = 0;
+  // 🔹 HEADER ROW 2 — Subcolumns under each substitution
+  const header2 = document.createElement("tr");
+  substitutions.forEach(() => {
+    header2.innerHTML += `<th>sl</th><th>sl%</th><th>st</th><th>st%</th>`;
+  });
+  header2.innerHTML += `<th>cltotal</th><th>sttotal</th>`;
+  table.appendChild(header2);
 
-                const tr = document.createElement("tr");
-                tr.innerHTML = `<td>${row.entityname}</td><td>${row.periodicity}</td>`;
+  // 🔹 BODY ROWS — One per entity + periodicity
+  Object.values(grouped).forEach(row => {
+    let cltotal = 0;
+    let sttotal = 0;
 
-                substitutions.forEach(sub => {
-                    const val = row.subs[sub] || { sl: 0, slp: 0, st: 0, stp: 0 };
-                    cltotal += val.sl;
-                    sttotal += val.st;
-                    tr.innerHTML += `<td>${val.sl}</td><td>${val.slp}</td><td>${val.st}</td><td>${val.stp}</td>`;
-                });
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${row.entityname}</td><td>${row.periodicity}</td>`;
 
-                tr.innerHTML += `<td>${cltotal}</td><td>${sttotal}</td>`;
-                table.appendChild(tr);
-            });
+    substitutions.forEach(sub => {
+      const val = row.subs[sub] || { sl: 0, slp: 0, st: 0, stp: 0 };
+      cltotal += val.sl;
+      sttotal += val.st;
+      tr.innerHTML += `
+        <td>${val.sl}</td>
+        <td>${val.slp}</td>
+        <td>${val.st}</td>
+        <td>${val.stp}</td>
+      `;
+    });
 
-            document.getElementById("tableContainer").appendChild(table);
-        }
+    tr.innerHTML += `<td>${cltotal}</td><td>${sttotal}</td>`;
+    table.appendChild(tr);
+  });
+
+  document.getElementById("tableContainer").appendChild(table);
+}
 
 
-        generateTable();
-    </script>
-
-</body>
-
-</html>
+generateTable();
